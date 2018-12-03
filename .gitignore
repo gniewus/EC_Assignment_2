@@ -8,7 +8,7 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
+#*.jar
 *.war
 *.ear
 
@@ -191,4 +191,9 @@ nbactions.xml
 /target/
 /EC_Assignment_2.iml
 EC_Assignment_2.iml
+
+!/lib/hermes-0.9-jar-with-dependencies.jar
+/hermes.log
+hermes.log
+kv_store/
 

@@ -47,10 +47,17 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/hermes-0.9-jar-with-dependencies.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-version}</version>
+        </dependency>
     </dependencies>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--The newest stable slf4j version-->
+        <slf4j-version>1.7.25</slf4j-version>
     </properties>
 
 
