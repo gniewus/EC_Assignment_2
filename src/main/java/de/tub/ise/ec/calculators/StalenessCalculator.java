@@ -10,6 +10,7 @@ package de.tub.ise.ec.calculators;
  * <br>
  * Example: A write starts at T=0 and commits at T=2. The first replica is written at T=2, the second at
  * T=5. In that case, staleness would be 3 (=5-2).
+ *
  * @author Jacek Janczura
  */
 public class StalenessCalculator implements ICalculator{

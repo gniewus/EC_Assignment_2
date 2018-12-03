@@ -6,6 +6,7 @@ package de.tub.ise.ec.calculators;
  * <br>
  * Latency is defined as the period of time between the start and the commit timestamp of a write
  * operation.
+ *
  * @author Jacek Janczura
  */
 public class LatencyCalculator implements ICalculator {
