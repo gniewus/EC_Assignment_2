@@ -1,4 +1,4 @@
-package de.tub.ise.ec.Calculators;
+package de.tub.ise.ec.calculators;
 
 /**
  * Implementations of this interface can calculate min, max and average value
