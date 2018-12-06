@@ -3,7 +3,7 @@ package de.tub.ise.ec;
 import de.tub.ise.ec.kv.FileSystemKVStore;
 import de.tub.ise.ec.kv.KeyValueInterface;
 import de.tub.ise.hermes.*;
-
+import  de.tub.ise.ec.servers.*;
 import java.io.IOException;
 
 public class Main {
@@ -11,9 +11,22 @@ public class Main {
 	public static void main(String[] args) {
 
 		// HERMES TEST
-		int port = 8080;
+		int port = 8000;
 		String host = "127.0.0.1"; // localhost
 
+		//MasterServer master = new MasterServer();
+		SlaveServer slave = new SlaveServer();
+
+		// Let's agree that the first item in the array will be the actual CRUD command
+		Request req = new Request("listKeys", "storageMessageHandler", "localSampleClient");
+
+
+		Sender sender = new Sender(host, port);
+		Response res = sender.sendMessage(req, 5000);
+		System.out.println("Response: " + res.getResponseMessage()+ res.getItems());
+
+
+/*
 		// Server: register handler
 		RequestHandlerRegistry reg = RequestHandlerRegistry.getInstance();
 		reg.registerHandler("sampleMessageHandler", new SampleMessageHandler());
@@ -38,6 +51,6 @@ public class Main {
 		 KeyValueInterface store = new FileSystemKVStore();
 		 store.store("monkey","banana");
 		 System.out.println("Received: " + store.getValue("monkey"));
-		 store.delete("monkey");
+		 store.delete("monkey");*/
 	}
 }

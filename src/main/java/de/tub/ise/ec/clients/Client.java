@@ -2,6 +2,8 @@ package de.tub.ise.ec.clients;
 
 import de.tub.ise.ec.servers.MasterServer;
 import de.tub.ise.ec.servers.SlaveServer;
+import de.tub.ise.hermes.Response;
+import de.tub.ise.hermes.Sender;
 
 /**
  * Implementation of a CRUD client
