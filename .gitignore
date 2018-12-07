@@ -189,11 +189,11 @@ nbdist/
 nbactions.xml
 .nb-gradle/
 /target/
-/EC_Assignment_2.iml
 EC_Assignment_2.iml
 
 !/lib/hermes-0.9-jar-with-dependencies.jar
 /hermes.log
-hermes.log
 kv_store/
 
+/kv_store_slave/
+EC_Assignment_2.log
