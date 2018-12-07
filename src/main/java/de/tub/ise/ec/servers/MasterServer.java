@@ -8,9 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Class that extends the SlaveServer.
@@ -22,26 +19,18 @@ import java.util.Map;
  */
 public class MasterServer extends SlaveServer {
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    //TODO Find out where to measure the time to calculate latency and staleness
-    // TODO Think about measuring more than one timestamp
-    //Mapa zawierająca: numer operacji oraz liste
-    // Lista zawieta timestamp operacji write, klucz, wartość
-    private Map<Integer, List<String>> operationsMap = new HashMap<>();
-
-
+    //Receiver receiver;
     public MasterServer(int port, String host) {
+        super(port, host);
         // For simplicity let's run them on different ports
 
         // Server: register handler
-        RequestHandlerRegistry reg = RequestHandlerRegistry.getInstance();
-        reg.registerHandler("sampleMessageHandler", new SampleMessageHandler());
-
-
+        requestHandlerRegistry = RequestHandlerRegistry.getInstance();
+        requestHandlerRegistry.registerHandler("sampleMessageHandler", new SampleMessageHandler());
 
         // Server: start receiver
         try {
-            Receiver receiver = new Receiver(port);
+             receiver = new Receiver(port);
             receiver.start();
             log.info("Master listening on port : {}", port);
 
@@ -50,18 +39,17 @@ public class MasterServer extends SlaveServer {
         }
     }
     public MasterServer() {
+        super();
         // For simplicity let's run them on different ports
-        int port = 8001;
+        port = 8001;
 
         // Server: register handler
-        RequestHandlerRegistry reg = RequestHandlerRegistry.getInstance();
-        reg.registerHandler("sampleMessageHandler", new SampleMessageHandler());
-
-
+        requestHandlerRegistry = RequestHandlerRegistry.getInstance();
+        requestHandlerRegistry.registerHandler("sampleMessageHandler", new SampleMessageHandler());
 
         // Server: start receiver
         try {
-            Receiver receiver = new Receiver(port);
+            receiver = new Receiver(port);
             receiver.start();
             log.info("Master listening on port : {}", port);
 
@@ -74,7 +62,4 @@ public class MasterServer extends SlaveServer {
 
     }
 
-    public Map<Integer, List<String>> getOperationsMap() {
-        return operationsMap;
-    }
 }

@@ -26,17 +26,22 @@ public class SlaveServer {
     // TODO Think about measuring more than one timestamp
     //Mapa zawierająca: numer operacji oraz liste
     // Lista zawieta timestamp operacji write, klucz, wartość
-    private Map<Integer, List<String>> operationsMap = new HashMap<>();
+    Map<Integer, List<String>> operationsMap = new HashMap<>();
+
+    int port;
+    String host;
+    Receiver receiver;
+    RequestHandlerRegistry requestHandlerRegistry;
 
     public SlaveServer(int port, String host){
 
         // Server: register handler
-        RequestHandlerRegistry reg = RequestHandlerRegistry.getInstance();
-        reg.registerHandler("storageMessageHandler", new StorageMessageHandler("./kv_store_slave"));
+         requestHandlerRegistry = RequestHandlerRegistry.getInstance();
+        requestHandlerRegistry.registerHandler("storageMessageHandler", new StorageMessageHandler("./kv_store_slave"));
 
         // Server: start receiver
         try {
-            Receiver receiver = new Receiver(port);
+            receiver = new Receiver(port);
             receiver.start();
             log.info("Slave listening on port : {}", port);
         } catch (IOException e) {
@@ -45,24 +50,35 @@ public class SlaveServer {
     }
 
     public SlaveServer(){
-        int port = 8000;
-        String host = "127.0.0.1"; // localhost
+        port = 8000;
+        host = "127.0.0.1"; // localhost
 
         // Server: register handler
-        RequestHandlerRegistry reg = RequestHandlerRegistry.getInstance();
-        reg.registerHandler("storageMessageHandler", new StorageMessageHandler("./kv_store_slave"));
+        requestHandlerRegistry = RequestHandlerRegistry.getInstance();
+        requestHandlerRegistry.registerHandler("storageMessageHandler", new StorageMessageHandler("./kv_store_slave"));
 
         // Server: start receiver
         try {
-            Receiver receiver = new Receiver(port);
+            receiver = new Receiver(port);
             receiver.start();
             log.info("Slave listening on port : {}", port);
         } catch (IOException e) {
             log.error("Connection error: {}", e.getMessage(), e);
         }
     }
+
+    public void terminate(){
+        //receiver.terminate();
+    }
     public Map<Integer, List<String>> getOperationsMap() {
         return operationsMap;
     }
 
+    public int getPort() {
+        return port;
+    }
+
+    public String getHost() {
+        return host;
+    }
 }
