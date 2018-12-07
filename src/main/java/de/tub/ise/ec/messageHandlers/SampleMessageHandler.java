@@ -1,4 +1,4 @@
-package de.tub.ise.ec;
+package de.tub.ise.ec.messageHandlers;
 
 import de.tub.ise.hermes.IRequestHandler;
 import de.tub.ise.hermes.Request;

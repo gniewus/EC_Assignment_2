@@ -1,6 +1,11 @@
 package de.tub.ise.ec.calculators;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.invoke.MethodHandles;
+
 /**
  * Class responsible for latency calculation.
  * <br>
@@ -10,6 +15,10 @@ package de.tub.ise.ec.calculators;
  * @author Jacek Janczura
  */
 public class LatencyCalculator implements ICalculator {
+
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+
     @Override
     public double min() {
         return 0;

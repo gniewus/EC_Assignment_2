@@ -1,43 +1,28 @@
 package de.tub.ise.ec;
 
-import de.tub.ise.ec.kv.FileSystemKVStore;
-import de.tub.ise.ec.kv.KeyValueInterface;
-import de.tub.ise.hermes.*;
+import de.tub.ise.ec.clients.Client;
+import de.tub.ise.ec.servers.SlaveServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 
 public class Main {
+	private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	public static void main(String[] args) {
 
-		// HERMES TEST
-		int port = 8080;
-		String host = "127.0.0.1"; // localhost
+		Client client = new Client();
 
-		// Server: register handler
-		RequestHandlerRegistry reg = RequestHandlerRegistry.getInstance();
-		reg.registerHandler("sampleMessageHandler", new SampleMessageHandler());
+		//MasterServer master = new MasterServer();
+		SlaveServer slave = new SlaveServer();
 
-		// Server: start receiver
-		try {
-			Receiver receiver = new Receiver(port);
-			receiver.start();
-		} catch (IOException e) {
-			System.out.println("Connection error: " + e);
-		}
+		client.write("1", "0");
+		client.listKeys();
+		client.write("2", "1");
+		client.read("1");
+		client.read("2");
+		client.listKeys();
 
-		// Client: create request
-		Request req = new Request("Message", "sampleMessageHandler", "localSampleClient");
-
-		// Client: send messages
-		Sender sender = new Sender(host, port);
-		Response res = sender.sendMessage(req, 5000);
-		System.out.println("Received: " + res.getResponseMessage());
-
-		 // Test kv store
-		 KeyValueInterface store = new FileSystemKVStore();
-		 store.store("monkey","banana");
-		 System.out.println("Received: " + store.getValue("monkey"));
-		 store.delete("monkey");
 	}
 }
