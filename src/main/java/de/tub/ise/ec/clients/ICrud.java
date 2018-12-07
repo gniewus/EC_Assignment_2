@@ -1,7 +1,6 @@
 package de.tub.ise.ec.clients;
 
-import de.tub.ise.ec.servers.MasterServer;
-import de.tub.ise.ec.servers.SlaveServer;
+import java.io.Serializable;
 
 /**
  * Specifies generic interface of a CRUD client
@@ -10,13 +9,13 @@ import de.tub.ise.ec.servers.SlaveServer;
  */
 public interface ICrud {
 
-    public Object read(SlaveServer slaveServer);
+    public Object read(String key);
 
-    public void write(MasterServer masterServer);
+    public void write(String key, Serializable value);
 
-    public void update();
+    public void update(String key, Serializable value);
 
-    public void delete();
+    public void delete(String key);
 
 
 
