@@ -26,7 +26,7 @@ public interface KeyValueInterface {
      * @param key
      * @param value
      */
-    void store(String key, Serializable value);
+    boolean store(String key, Serializable value);
 
     /**
      * deletes the key value pair for a given key

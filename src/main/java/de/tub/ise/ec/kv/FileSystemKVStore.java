@@ -20,7 +20,6 @@ public class FileSystemKVStore implements KeyValueInterface {
 
     public FileSystemKVStore(String rootDir) {
         this.rootDir = rootDir;
-        ;
     }
 
     /**
@@ -74,7 +73,7 @@ public class FileSystemKVStore implements KeyValueInterface {
      * @param value
      */
     @Override
-    public void store(String key, Serializable value) {
+    public boolean store(String key, Serializable value) {
         File f = new File(rootDir + File.separator + key);
         if (!f.isDirectory()) {
             if (!f.isFile()) {
@@ -84,6 +83,7 @@ public class FileSystemKVStore implements KeyValueInterface {
                     f.createNewFile();
                 } catch (IOException e) {
                     log.error("File {} could not be created. ", f.getAbsolutePath(), e);
+                    return false;
                 }
                 // update file content
                 try {
@@ -93,9 +93,11 @@ public class FileSystemKVStore implements KeyValueInterface {
                     oo.close();
                 } catch (IOException e) {
                     log.error("Writing value to file failed for key {} .", key, e);
+                    return false;
                 }
             }
         }
+        return true;
     }
 
     /**
