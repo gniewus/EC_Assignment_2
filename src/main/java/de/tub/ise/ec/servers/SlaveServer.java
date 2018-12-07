@@ -1,16 +1,16 @@
 package de.tub.ise.ec.servers;
 
-import de.tub.ise.ec.SampleMessageHandler;
-import de.tub.ise.ec.kv.FileSystemKVStore;
-import de.tub.ise.ec.kv.KeyValueInterface;
+import de.tub.ise.ec.messageHandlers.StorageMessageHandler;
 import de.tub.ise.hermes.Receiver;
-import de.tub.ise.hermes.Request;
 import de.tub.ise.hermes.RequestHandlerRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * From this class client can only read the value from the keystore
@@ -22,8 +22,27 @@ import java.lang.invoke.MethodHandles;
 public class SlaveServer {
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    //KeyValueInterface store = new FileSystemKVStore("./kv_store_slave");
+    //TODO Find out where to measure the time to calculate latency and staleness
+    // TODO Think about measuring more than one timestamp
+    //Mapa zawierająca: numer operacji oraz liste
+    // Lista zawieta timestamp operacji write, klucz, wartość
+    private Map<Integer, List<String>> operationsMap = new HashMap<>();
 
+    public SlaveServer(int port, String host){
+
+        // Server: register handler
+        RequestHandlerRegistry reg = RequestHandlerRegistry.getInstance();
+        reg.registerHandler("storageMessageHandler", new StorageMessageHandler("./kv_store_slave"));
+
+        // Server: start receiver
+        try {
+            Receiver receiver = new Receiver(port);
+            receiver.start();
+            log.info("Slave listening on port : {}", port);
+        } catch (IOException e) {
+            log.error("Connection error: {}", e.getMessage(), e);
+        }
+    }
 
     public SlaveServer(){
         int port = 8000;
@@ -41,6 +60,9 @@ public class SlaveServer {
         } catch (IOException e) {
             log.error("Connection error: {}", e.getMessage(), e);
         }
+    }
+    public Map<Integer, List<String>> getOperationsMap() {
+        return operationsMap;
     }
 
 }
