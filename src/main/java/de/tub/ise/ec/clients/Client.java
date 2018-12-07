@@ -37,6 +37,50 @@ public class Client implements ICrud {
         log.info("Client on a port "+ port + " and host " + host + " created. ");
     }
 
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public void createSender(String host, int port){
+        sender = new Sender(host, port);
+    }
+
+    public Sender getSender() {
+        return sender;
+    }
+
+    private void crazyUpdate(String key, String value) throws InterruptedException {
+        for(int i = 0; i<100; i++){
+            sleep();
+            update(key, value);
+        }
+    }
+
+    private void sleep(){
+        try
+        {
+            Thread.sleep(1000);
+        }
+        catch(InterruptedException ex)
+        {
+            log.error("1 s sleep interupted ", ex);
+            Thread.currentThread().interrupt();
+        }
+    }
+
     public void listKeys(){
         Request request = new Request("listKeys", "storageMessageHandler", "localSampleClient");
         logResponse(sendRequest(request));
@@ -78,30 +122,9 @@ public class Client implements ICrud {
         else {
             log.info("Response: " + response.getResponseMessage() + " " + response.getItems());
         }
-
     }
 
-    public int getPort() {
-        return port;
-    }
 
-    public void setPort(int port) {
-        this.port = port;
-    }
 
-    public String getHost() {
-        return host;
-    }
 
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public void createSender(){
-        sender = new Sender(host, port);
-    }
-
-    public Sender getSender() {
-        return sender;
-    }
 }
