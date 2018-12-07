@@ -6,7 +6,11 @@ import de.tub.ise.ec.kv.KeyValueInterface;
 import de.tub.ise.hermes.Receiver;
 import de.tub.ise.hermes.Request;
 import de.tub.ise.hermes.RequestHandlerRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 
 /**
  * From this class client can only read the value from the keystore
@@ -16,6 +20,7 @@ import java.io.IOException;
  * @author Jacek Janczura
  */
 public class SlaveServer {
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     //KeyValueInterface store = new FileSystemKVStore("./kv_store_slave");
 
@@ -32,9 +37,9 @@ public class SlaveServer {
         try {
             Receiver receiver = new Receiver(port);
             receiver.start();
-            System.out.println("Slave listening on port : " + port);
+            log.info("Slave listening on port : {}", port);
         } catch (IOException e) {
-            System.out.println("Connection error: " + e);
+            log.error("Connection error: {}", e.getMessage(), e);
         }
     }
 

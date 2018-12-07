@@ -4,14 +4,20 @@ import de.tub.ise.hermes.IRequestHandler;
 import de.tub.ise.hermes.Request;
 import de.tub.ise.hermes.Response;
 import de.tub.ise.ec.kv.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 /**
  * Created by tomasztkaczyk on 06.12.18.
  */
 public class StorageMessageHandler implements IRequestHandler {
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+
     KeyValueInterface store;
     //Boolean isMaster;
     public  StorageMessageHandler(String path){

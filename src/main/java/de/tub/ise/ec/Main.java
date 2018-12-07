@@ -5,8 +5,13 @@ import de.tub.ise.ec.kv.KeyValueInterface;
 import de.tub.ise.hermes.*;
 import  de.tub.ise.ec.servers.*;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main {
+	private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	public static void main(String[] args) {
 
@@ -23,7 +28,7 @@ public class Main {
 
 		Sender sender = new Sender(host, port);
 		Response res = sender.sendMessage(req, 5000);
-		System.out.println("Response: " + res.getResponseMessage()+ res.getItems());
+		log.info("Response: " + res.getResponseMessage()+ res.getItems());
 
 
 /*

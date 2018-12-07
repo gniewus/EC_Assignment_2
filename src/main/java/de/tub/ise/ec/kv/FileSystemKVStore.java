@@ -1,10 +1,16 @@
 package de.tub.ise.ec.kv;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileSystemKVStore implements KeyValueInterface {
+
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private String rootDir;
 
@@ -33,8 +39,7 @@ public class FileSystemKVStore implements KeyValueInterface {
             value = oi.readObject();
             oi.close();
         } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Retrieving value for key " + key + " failed.");
-            e.printStackTrace();
+            log.error("Retrieving value for key {} failed.", key, e);
         }
         return value;
     }
@@ -54,7 +59,7 @@ public class FileSystemKVStore implements KeyValueInterface {
             }
 
         } catch (NullPointerException err) {
-            //Empty or non existing storage folder
+            log.error("Empty or non existing storage folder", err);
             return result;
 
         }
@@ -78,8 +83,7 @@ public class FileSystemKVStore implements KeyValueInterface {
                     parent.mkdirs(); // create parent directories
                     f.createNewFile();
                 } catch (IOException e) {
-                    System.err.println("File " + f.getAbsolutePath() + " could not be created.");
-                    e.printStackTrace();
+                    log.error("File {} could not be created. ", f.getAbsolutePath(), e);
                 }
                 // update file content
                 try {
@@ -88,8 +92,7 @@ public class FileSystemKVStore implements KeyValueInterface {
                     oo.writeObject(value);
                     oo.close();
                 } catch (IOException e) {
-                    System.err.println("Writing value to file failed for key " + key + ".");
-                    e.printStackTrace();
+                    log.error("Writing value to file failed for key {} .", key, e);
                 }
             }
         }
