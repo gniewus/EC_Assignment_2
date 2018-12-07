@@ -1,6 +1,5 @@
-package de.tub.ise.test;
+package de.tub.ise.ec.clients;
 
-import de.tub.ise.ec.clients.Client;
 import de.tub.ise.ec.servers.SlaveServer;
 import de.tub.ise.hermes.Request;
 import de.tub.ise.hermes.Response;
@@ -10,10 +9,25 @@ import org.junit.Test;
 import java.util.Arrays;
 
 public class ClientTest {
-    Client client = new Client();
+    private Client client = new Client();
 
     //MasterServer master = new MasterServer();
-    SlaveServer slave = new SlaveServer();
+    private SlaveServer slaveServer = new SlaveServer();
+
+/*    @Before
+    public void setUp(){
+        if(client == null){
+            client = new Client();
+        }
+        if(slaveServer == null) {
+            slaveServer = new SlaveServer();
+        }
+    }*/
+
+/*    @After
+    public void cleanUp(){
+        slaveServer.terminate();
+    }*/
 
     @Test
     public void generalOperationsTest(){
