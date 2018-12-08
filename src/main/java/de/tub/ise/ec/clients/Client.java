@@ -162,17 +162,16 @@ public class Client implements ICrud {
         return new Request(Arrays.asList("updateKey", key, value), "storageMessageHandler", "localSampleClient");
     }
 
-    public void sendRequest(Request request, boolean toMaster){
-        if(toMaster){
-            log.debug("Send request: {} to master", request.getItems().get(0));
-            Response response = senderMaster.sendMessage(request, 5000);
-            logResponse(response);
-        }
-        else {
-            log.debug("Send request: {} to slave", request.getItems().get(0));
-            Response response =  senderSlave.sendMessage(request, 5000);
-            logResponse(response);
-        }
+    public void sendToMaster(Request request){
+        log.debug("Send request: {} to master", request.getItems().get(0));
+        Response response = senderMaster.sendMessage(request, 5000);
+        logResponse(response);
+    }
+
+    public void sendToSlave(Request request){
+        log.debug("Send request: {} to slave", request.getItems().get(0));
+        Response response =  senderSlave.sendMessage(request, 5000);
+        logResponse(response);
     }
 
     private void logResponse(Response response){
