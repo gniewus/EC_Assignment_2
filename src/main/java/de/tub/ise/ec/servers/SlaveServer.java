@@ -19,19 +19,19 @@ import java.util.Map;
  *
  * @author Jacek Janczura
  */
-public class SlaveServer {
+public class SlaveServer implements IServer{
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     //TODO Find out where to measure the time to calculate latency and staleness
     // TODO Think about measuring more than one timestamp
     //Mapa zawierająca: numer operacji oraz liste
     // Lista zawieta timestamp operacji write, klucz, wartość
-    Map<Integer, List<String>> operationsMap = new HashMap<>();
+    private Map<Integer, List<String>> operationsMap = new HashMap<>();
 
-    int port;
-    String host;
-    Receiver receiver;
-    RequestHandlerRegistry requestHandlerRegistry;
+    private int port;
+    private String host;
+    private Receiver receiver;
+    private RequestHandlerRegistry requestHandlerRegistry;
 
     public SlaveServer(int port, String host){
 

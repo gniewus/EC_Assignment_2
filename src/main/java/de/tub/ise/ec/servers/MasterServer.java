@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class that extends the SlaveServer.
@@ -18,9 +21,16 @@ import java.lang.invoke.MethodHandles;
  *
  * @author Jacek Janczura
  */
-public class MasterServer extends SlaveServer {
+public class MasterServer implements IServer {
+
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    //Receiver receiver;
+    private Map<Integer, List<String>> operationsMap = new HashMap<>();
+
+    private int port;
+    private String host;
+    private Receiver receiver;
+    private RequestHandlerRegistry requestHandlerRegistry;
+
     public MasterServer(int port, String host) {
         //super(port, host);
         this.port = port;
@@ -41,6 +51,7 @@ public class MasterServer extends SlaveServer {
             log.error("Connection error: {}", e.getMessage(), e);
         }
     }
+
     public MasterServer() {
         //super(8001, "127.0.0.1");
         // For simplicity let's run them on different ports
