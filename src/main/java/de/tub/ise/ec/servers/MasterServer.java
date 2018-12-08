@@ -79,4 +79,18 @@ public class MasterServer implements IServer {
 
     }
 
+    @Override
+    public Map<Integer, List<String>> getOperationsMap() {
+        return operationsMap;
+    }
+
+    @Override
+    public int getPort() {
+        return port;
+    }
+
+    @Override
+    public String getHost() {
+        return host;
+    }
 }

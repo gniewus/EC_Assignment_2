@@ -1,6 +1,5 @@
 package de.tub.ise.ec.servers;
 
-import de.tub.ise.ec.messageHandlers.MasterStorageMessageHandler;
 import de.tub.ise.ec.messageHandlers.SlaveStorageMessageHandler;
 import de.tub.ise.hermes.Receiver;
 import de.tub.ise.hermes.RequestHandlerRegistry;
@@ -69,16 +68,20 @@ public class SlaveServer implements IServer{
     }
 
     public void terminate(){
-        //receiver.terminate();
+        receiver.terminate();
     }
+
+    @Override
     public Map<Integer, List<String>> getOperationsMap() {
         return operationsMap;
     }
 
+    @Override
     public int getPort() {
         return port;
     }
 
+    @Override
     public String getHost() {
         return host;
     }
