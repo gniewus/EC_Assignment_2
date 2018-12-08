@@ -1,6 +1,7 @@
 package de.tub.ise.ec.servers;
 
-import de.tub.ise.ec.messageHandlers.StorageMessageHandler;
+import de.tub.ise.ec.messageHandlers.MasterStorageMessageHandler;
+import de.tub.ise.ec.messageHandlers.SlaveStorageMessageHandler;
 import de.tub.ise.hermes.Receiver;
 import de.tub.ise.hermes.RequestHandlerRegistry;
 import org.slf4j.Logger;
@@ -37,7 +38,7 @@ public class SlaveServer implements IServer{
 
         // Server: register handler
          requestHandlerRegistry = RequestHandlerRegistry.getInstance();
-        requestHandlerRegistry.registerHandler("storageMessageHandler", new StorageMessageHandler("./kv_store_slave"));
+        requestHandlerRegistry.registerHandler("storageMessageHandler", new SlaveStorageMessageHandler("./kv_store_slave"));
 
         // Server: start receiver
         try {
@@ -55,7 +56,7 @@ public class SlaveServer implements IServer{
 
         // Server: register handler
         requestHandlerRegistry = RequestHandlerRegistry.getInstance();
-        requestHandlerRegistry.registerHandler("storageMessageHandler", new StorageMessageHandler("./kv_store_slave"));
+        requestHandlerRegistry.registerHandler("storageMessageHandler", new SlaveStorageMessageHandler("./kv_store_slave"));
 
         // Server: start receiver
         try {

@@ -1,9 +1,9 @@
 package de.tub.ise.ec.servers;
 
-import de.tub.ise.ec.messageHandlers.SampleMessageHandler;
-import de.tub.ise.ec.messageHandlers.StorageMessageHandler;
+import de.tub.ise.ec.messageHandlers.MasterStorageMessageHandler;
 import de.tub.ise.hermes.Receiver;
 import de.tub.ise.hermes.RequestHandlerRegistry;
+import de.tub.ise.hermes.Sender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +29,7 @@ public class MasterServer implements IServer {
     private int port;
     private String host;
     private Receiver receiver;
+    private Sender sender;
     private RequestHandlerRegistry requestHandlerRegistry;
 
     public MasterServer(int port, String host) {
@@ -39,7 +40,7 @@ public class MasterServer implements IServer {
 
         // Server: register handler
         requestHandlerRegistry = RequestHandlerRegistry.getInstance();
-        requestHandlerRegistry.registerHandler("sampleMessageHandler", new SampleMessageHandler());
+        requestHandlerRegistry.registerHandler("storageMessageHandler", new MasterStorageMessageHandler("./kv_store_master"));
 
         // Server: start receiver
         try {
@@ -60,7 +61,7 @@ public class MasterServer implements IServer {
         // Server: register handler
         requestHandlerRegistry = RequestHandlerRegistry.getInstance();
         //requestHandlerRegistry.registerHandler("sampleMessageHandler", new SampleMessageHandler());
-        requestHandlerRegistry.registerHandler("storageMessageHandler", new StorageMessageHandler("./kv_store_slave"));
+        requestHandlerRegistry.registerHandler("storageMessageHandler", new MasterStorageMessageHandler("./kv_store_master"));
 
 
         // Server: start receiver

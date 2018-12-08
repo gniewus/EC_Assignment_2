@@ -16,11 +16,13 @@ public abstract class Message {
     Request request;
     KeyValueInterface store;
     List<Serializable> items;
+    Boolean isMaster;
 
     Message(Request request, KeyValueInterface store){
         this.request=request;
         this.store=store;
         items = request.getItems();
     }
+
     public abstract Response sendMessage();
 }

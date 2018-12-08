@@ -16,11 +16,18 @@ public class AddValue extends Message {
         super(request, store);
     }
 
+    String key = items.get(1).toString();
+    String value = items.get(2).toString();
+
+    public boolean addValueToKV() {
+        return store.store(key, value);
+    }
+
     @Override
     public Response sendMessage() {
-        String key = items.get(1).toString();
-        String value = items.get(2).toString();
-        boolean isStored = store.store(key, value);
-        return new Response("Store value " + value + " under the key "+ key + " result " + isStored, isStored, request );
+        Boolean isLocalyStored = addValueToKV();
+        Response res;
+        res = new Response("Store value " + value + " under the key " + key + " result " + isLocalyStored, isLocalyStored, request);
+        return res;
     }
 }

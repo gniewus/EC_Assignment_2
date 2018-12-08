@@ -31,6 +31,7 @@ public class ClientTest {
 
     @Test
     public void generalOperationsTest(){
+        //:TODO Refactor test
         client.write("1", 0);
         client.listKeys();
         client.write("2", "1");
@@ -41,12 +42,13 @@ public class ClientTest {
         client.listKeys();
         client.write("1", 0);
         client.listKeys();
+
     }
 
     @Test
     public void addValueTest(){
         Request request = new Request(Arrays.asList("addValue", 1, 1), "storageMessageHandler", "localSampleClient");
-        Response response = client.getSender().sendMessage(request, 5000);
+        Response response = client.getSenderMaster().sendMessage(request, 5000);
         Assert.assertTrue(response.responseCode());
     }
 
@@ -54,7 +56,7 @@ public class ClientTest {
     public void readValueTest(){
         client.write("1", "0");
         Request request = new Request(Arrays.asList("readValue", "1"), "storageMessageHandler", "localSampleClient");
-        Response response = client.getSender().sendMessage(request, 5000);
+        Response response = client.getSenderSlave().sendMessage(request, 5000);
         Assert.assertEquals("0", response.getItems().get(0));
         Assert.assertTrue(response.responseCode());
     }

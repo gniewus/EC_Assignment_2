@@ -1,5 +1,7 @@
 package de.tub.ise.ec.clients;
 
+import de.tub.ise.hermes.Request;
+
 import java.io.Serializable;
 
 /**
@@ -11,11 +13,11 @@ public interface ICrud {
 
     public Object read(String key);
 
-    public void write(String key, Serializable value);
+    public Request write(String key, Serializable value);
 
-    public void update(String key, Serializable value);
+    public Request update(String key, Serializable value);
 
-    public void delete(String key);
+    public Request delete(String key);
 
 
 
