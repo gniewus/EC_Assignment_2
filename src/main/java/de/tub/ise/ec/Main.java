@@ -1,7 +1,7 @@
 package de.tub.ise.ec;
 
 import de.tub.ise.ec.clients.Client;
-import de.tub.ise.ec.servers.SlaveServer;
+import de.tub.ise.ec.servers.MasterServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +14,8 @@ public class Main {
 
 		Client client = new Client();
 
-		//MasterServer master = new MasterServer();
-		SlaveServer slave = new SlaveServer();
+		MasterServer master = new MasterServer();
+		//SlaveServer slave = new SlaveServer();
 
 		client.write("1", "0");
 		client.listKeys();

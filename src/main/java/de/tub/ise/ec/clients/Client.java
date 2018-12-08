@@ -24,7 +24,7 @@ public class Client implements ICrud {
     private Sender sender;
 
     public Client() {
-        port = 8000;
+        port = 8001;
         host = "127.0.0.1"; // localhost
         sender = new Sender(host, port);
         log.info("Default client on a port "+ port + " and host " + host + " created. ");

@@ -1,6 +1,7 @@
 package de.tub.ise.ec.servers;
 
 import de.tub.ise.ec.messageHandlers.SampleMessageHandler;
+import de.tub.ise.ec.messageHandlers.StorageMessageHandler;
 import de.tub.ise.hermes.Receiver;
 import de.tub.ise.hermes.RequestHandlerRegistry;
 import org.slf4j.Logger;
@@ -21,7 +22,9 @@ public class MasterServer extends SlaveServer {
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     //Receiver receiver;
     public MasterServer(int port, String host) {
-        super(port, host);
+        //super(port, host);
+        this.port = port;
+        this.host = host;
         // For simplicity let's run them on different ports
 
         // Server: register handler
@@ -39,13 +42,15 @@ public class MasterServer extends SlaveServer {
         }
     }
     public MasterServer() {
-        super();
+        //super(8001, "127.0.0.1");
         // For simplicity let's run them on different ports
-        port = 8001;
-
+        this.port = 8001;
+        this.host = "127.0.0.1";
         // Server: register handler
         requestHandlerRegistry = RequestHandlerRegistry.getInstance();
-        requestHandlerRegistry.registerHandler("sampleMessageHandler", new SampleMessageHandler());
+        //requestHandlerRegistry.registerHandler("sampleMessageHandler", new SampleMessageHandler());
+        requestHandlerRegistry.registerHandler("storageMessageHandler", new StorageMessageHandler("./kv_store_slave"));
+
 
         // Server: start receiver
         try {
