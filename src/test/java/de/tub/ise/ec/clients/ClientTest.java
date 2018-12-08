@@ -1,6 +1,6 @@
 package de.tub.ise.ec.clients;
 
-import de.tub.ise.ec.servers.SlaveServer;
+import de.tub.ise.ec.servers.MasterServer;
 import de.tub.ise.hermes.Request;
 import de.tub.ise.hermes.Response;
 import org.junit.Assert;
@@ -12,7 +12,7 @@ public class ClientTest {
     private Client client = new Client();
 
     //MasterServer master = new MasterServer();
-    private SlaveServer slaveServer = new SlaveServer();
+    private MasterServer masterServer = new MasterServer();
 
 /*    @Before
     public void setUp(){
