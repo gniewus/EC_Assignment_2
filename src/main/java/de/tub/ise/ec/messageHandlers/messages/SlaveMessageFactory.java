@@ -10,6 +10,8 @@ public class SlaveMessageFactory {
                 return createListKeys(request, store);
             case "readValue":
                 return createReadValue(request, store);
+            case "addValue":
+                return createAddValue(request, store);
         }
         throw new IllegalArgumentException();
     }
@@ -20,5 +22,8 @@ public class SlaveMessageFactory {
 
     private static Message createReadValue(Request request, KeyValueInterface store) {
         return new ReadValue(request, store);
+    }
+    private static Message createAddValue(Request request, KeyValueInterface store) {
+        return new AddValue(request, store);
     }
 }

@@ -24,10 +24,9 @@ public class AddValue extends Message {
     }
 
     @Override
-    public Response sendMessage() {
+    public Response respond() {
         Boolean isLocalyStored = addValueToKV();
-        Response res;
-        res = new Response("Store value " + value + " under the key " + key + " result " + isLocalyStored, isLocalyStored, request);
+        Response res = new Response("Store value " + value + " under the key " + key + " result " + isLocalyStored, isLocalyStored, request);
         return res;
     }
 }
