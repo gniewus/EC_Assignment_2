@@ -2,7 +2,6 @@ package de.tub.ise.ec.messageHandlers;
 
 import de.tub.ise.ec.kv.FileSystemKVStore;
 import de.tub.ise.ec.kv.KeyValueInterface;
-import de.tub.ise.ec.messageHandlers.messages.MasterMessageFactory;
 import de.tub.ise.ec.messageHandlers.messages.Message;
 import de.tub.ise.ec.messageHandlers.messages.SlaveMessageFactory;
 import de.tub.ise.hermes.IRequestHandler;
@@ -28,7 +27,7 @@ public class SlaveStorageMessageHandler implements IRequestHandler {
     }
 
     private Response sendMessage(Message message)  {
-        return message.sendMessage();
+        return message.respond();
     }
 
     //:TODO Change this to false in case of async requests.

@@ -26,7 +26,7 @@ public class MasterStorageMessageHandler implements IRequestHandler {
     }
 
     private Response sendMessage(Message message) {
-        return message.sendMessage();
+        return message.respond();
     }
 
     //:TODO Change this to false in case of async requests.

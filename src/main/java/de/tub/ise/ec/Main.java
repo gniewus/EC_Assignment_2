@@ -17,12 +17,21 @@ public class Main {
         MasterServer master = new MasterServer(8001, "127.0.0.1");
         SlaveServer slave = new SlaveServer(8000, "127.0.0.1");
 
-        client.sendToSlave(client.write("1", "0"));
-        client.sendToSlave(client.read("1"));
-        client.sendToSlave(client.listKeys());
-        client.sendToMaster(client.write("X", "Y"));
-        client.sendToMaster(client.read("X"));
-        client.sendToMaster(client.listKeys());
+       // client.syncSendToSlave(client.write("n", "0"));
+       // client.syncSendToSlave(client.read("1"));
+//       // client.syncSendToSlave(client.listKeys());
+//        client.syncSendToMaster(client.write("X", "valuex"));
+//        client.syncSendToMaster(client.write("Y", "valuey"));
+//        client.syncSendToMaster(client.listKeys());
+//        client.syncSendToMaster(client.read("X"));
+//        client.syncSendToMaster(client.delete("X"));
+//        client.syncSendToMaster(client.listKeys());
+
+        client.syncSendToMaster(client.syncWrite("C", "valuex"));
+
+        client.syncSendToMaster(client.listKeys());
+        client.syncSendToSlave(client.listKeys());
+
 
     }
 

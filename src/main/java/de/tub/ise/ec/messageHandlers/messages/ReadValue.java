@@ -17,7 +17,7 @@ public class ReadValue extends Message{
     }
 
     @Override
-    public Response sendMessage() {
+    public Response respond() {
         String key = (String) items.get(1);
         String value = store.getValue(key).toString();
         return new Response("Key "+ key + " Value: " + value, true, request, value);

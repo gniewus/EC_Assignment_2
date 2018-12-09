@@ -24,5 +24,5 @@ public abstract class Message {
         items = request.getItems();
     }
 
-    public abstract Response sendMessage();
+    public abstract Response respond();
 }

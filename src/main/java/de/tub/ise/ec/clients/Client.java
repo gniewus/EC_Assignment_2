@@ -1,6 +1,7 @@
 package de.tub.ise.ec.clients;
 
 import de.tub.ise.hermes.Request;
+import de.tub.ise.hermes.AsyncCallbackRecipient;
 import de.tub.ise.hermes.Response;
 import de.tub.ise.hermes.Sender;
 import org.slf4j.Logger;
@@ -26,9 +27,11 @@ public class Client implements ICrud {
     private String hostMaster;
     private Sender senderMaster;
     private Sender senderSlave;
-    private String masterHandler ="storageMessageHandler";
+    private String masterHandler = "storageMessageHandler";
     private String slaveHandler = "storageMessageHandler";
-
+    /**
+     * Default constructor with hardcoded test values.
+     */
     public Client() {
         this.portSlave = 8000;
         this.hostSlave = "127.0.0.1";
@@ -36,19 +39,30 @@ public class Client implements ICrud {
         this.portMaster = 8001;
         this.hostMaster = "127.0.0.1";
 
-        senderMaster = new Sender(this.hostSlave, this.portSlave);
-        senderSlave = new Sender(this.hostMaster, this.portMaster);
-        log.info("Default client with two senders on ports "+ portMaster+","+portSlave + " and host " + hostMaster+","+hostSlave + " created. ");
+        senderSlave = new Sender(this.hostSlave, this.portSlave);
+        senderMaster = new Sender(this.hostMaster, this.portMaster);
+        log.info("Default client with two senders on ports " + portMaster + "," + portSlave + " and host " + hostMaster + "," + hostSlave + " created. ");
     }
 
+    /**
+     * Constructor can take two parameters to start master sender.
+     * @param port
+     * @param host
+     */
     public Client(int port, String host) {
         this.portMaster = port;
         this.hostMaster = host;
 
         senderMaster = new Sender(hostMaster, portMaster);
-        log.info("Client on a port "+ port + " and host " + host + " created. ");
+        log.info("Client on a port " + port + " and host " + host + " created. ");
     }
-
+    /**
+     * Constructor can take four parameters to start and parametrise both master and slave sender.
+     * @param portSlave
+     * @param hostSlave
+     * @param portMaster
+     * @param hostMaster
+     */
     public Client(int portSlave, String hostSlave, int portMaster, String hostMaster) {
         this.portSlave = portSlave;
         this.hostSlave = hostSlave;
@@ -57,7 +71,7 @@ public class Client implements ICrud {
 
         senderMaster = new Sender(this.hostSlave, this.portSlave);
         senderSlave = new Sender(this.hostMaster, this.portMaster);
-        log.info("Client with two senders on ports "+ portMaster+","+portSlave + " and host " + hostMaster+","+hostSlave + " created. ");
+        log.info("Client with two senders on ports " + portMaster + "," + portSlave + " and host " + hostMaster + "," + hostSlave + " created. ");
     }
 
     public Sender getSenderMaster() {
@@ -117,29 +131,26 @@ public class Client implements ICrud {
     }
 
     private void crazyUpdate(String key, String value) throws InterruptedException {
-        for(int i = 0; i<100; i++){
-            sleep();
+        for (int i = 0; i < 100; i++) {
+            sleep(50);
             update(key, value);
         }
     }
 
-    private void sleep(){
-        try
-        {
-            Thread.sleep(1000);
-        }
-        catch(InterruptedException ex)
-        {
+    private void sleep(int timeperiod) {
+        try {
+            Thread.sleep(timeperiod);
+        } catch (InterruptedException ex) {
             log.error("1 s sleep interupted ", ex);
             Thread.currentThread().interrupt();
         }
     }
 
-    public Request listKeys(){
+    public Request listKeys() {
         return new Request("listKeys", "storageMessageHandler", "localSampleClient");
     }
 
-    public Request read(String key){
+    public Request read(String key) {
 
         return new Request(Arrays.asList("readValue", key), "storageMessageHandler", "localSampleClient");
         //Response response = sendRequest(request);
@@ -153,6 +164,16 @@ public class Client implements ICrud {
     }
 
     @Override
+    public Request asyncWrite(String key, Serializable value) {
+        return new Request(Arrays.asList("asyncAddValue", key, value), "storageMessageHandler", "localSampleClient");
+    }
+
+    @Override
+    public Request syncWrite(String key, Serializable value) {
+        return new Request(Arrays.asList("syncAddValue", key, value), "storageMessageHandler", "localSampleClient");
+    }
+
+    @Override
     public Request delete(String key) {
         return new Request(Arrays.asList("deleteKey", key), "storageMessageHandler", "localSampleClient");
     }
@@ -162,23 +183,73 @@ public class Client implements ICrud {
         return new Request(Arrays.asList("updateKey", key, value), "storageMessageHandler", "localSampleClient");
     }
 
-    public void sendToMaster(Request request){
-        log.debug("Send request: {} to master", request.getItems().get(0));
+    public void syncSendToMaster(Request request) {
+        log.debug("Sent request: {} to master", request.getItems().get(0));
         Response response = senderMaster.sendMessage(request, 5000);
         logResponse(response);
     }
 
-    public void sendToSlave(Request request){
-        log.debug("Send request: {} to slave", request.getItems().get(0));
-        Response response =  senderSlave.sendMessage(request, 5000);
+    public void syncSendToSlave(Request request) {
+        log.debug("Sent sync request: {} to slave", request.getItems().get(0));
+        Response response = senderSlave.sendMessage(request, 5000);
         logResponse(response);
     }
 
-    private void logResponse(Response response){
-        if(response.getItems().isEmpty()){
+    public void asyncSendToMaster(Request request) {
+        log.debug("Sent async request: {} to master", request.getItems().get(0));
+        asyncCallback AsyncCallback = new asyncCallback();
+        Boolean messageSent = senderMaster.sendMessageAsync(request, AsyncCallback);
+        callbackFunction(AsyncCallback);
+
+    }
+
+    public void asyncSendToSlave(Request request) {
+
+        asyncCallback AsyncCallback = new asyncCallback();
+        Boolean messsageSent = senderSlave.sendMessageAsync(request, AsyncCallback);
+        log.debug("Send async request: {} to slave: " + messsageSent, request.getItems().get(0));
+        callbackFunction(AsyncCallback);
+    }
+
+    private Response callbackFunction(asyncCallback callback) {
+        while (true) {
+            sleep(50);
+            if (callback.getResponse() != null) break;
+        }
+        Response response = callback.getResponse();
+        return response;
+    }
+
+    private void logResponse(Response response) {
+        if (response.getItems().isEmpty()) {
             log.info("Response: " + response.getResponseMessage());
         } else {
             log.info("Response: " + response.getResponseMessage() + " " + response.getItems());
         }
     }
+
+    private class asyncCallback implements AsyncCallbackRecipient {
+
+        public Response getResponse() {
+            return response;
+        }
+
+        public void setResponse(Response response) {
+            this.response = response;
+        }
+
+        private Response response;
+
+        @Override
+        public void callback(Response resp) {
+            log.info("Callback finished working!");
+            logResponse(resp);
+            setResponse(resp);
+
+        }
+    }
+
+
 }
+
+

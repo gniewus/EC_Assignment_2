@@ -21,7 +21,7 @@ public class DeleteKey extends Message {
     }
 
     @Override
-    public Response sendMessage() {
+    public Response respond() {
         String key = (String) items.get(1);
 
         store.delete(key);

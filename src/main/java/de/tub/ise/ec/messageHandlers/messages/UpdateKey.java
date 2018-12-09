@@ -16,7 +16,7 @@ public class UpdateKey extends Message {
     }
 
     @Override
-    public Response sendMessage() {
+    public Response respond() {
         return null;
     }
 }

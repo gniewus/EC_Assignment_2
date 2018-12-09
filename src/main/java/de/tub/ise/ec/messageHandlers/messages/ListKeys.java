@@ -20,7 +20,7 @@ public class ListKeys extends Message {
     }
 
     @Override
-    public Response sendMessage() {
+    public Response respond() {
         List<String> keys = store.getKeys();
         return new Response("List of the available keys", true, request, (Serializable) keys);
 
