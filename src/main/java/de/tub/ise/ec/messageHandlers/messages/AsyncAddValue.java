@@ -25,6 +25,7 @@ public class AsyncAddValue extends Message {
 
     String key = items.get(1).toString();
     String value = items.get(2).toString();
+    String transactionId = items.get(3).toString();
     Client client = new Client();
     public boolean addValueToKV() {
         return store.store(key, value);
@@ -33,8 +34,8 @@ public class AsyncAddValue extends Message {
     @Override
     public Response respond() {
         Boolean isLocalyStored = addValueToKV();
-        client.asyncSendToSlave(request);
-        Response res = new Response("Async | Store value " + value + " under the key " + key + " result " + isLocalyStored, isLocalyStored, request);
-        return res;
+        log.info("Value stored on master | {} | {}",key,transactionId);
+        client.asyncSendToSlave(client.write(key,value,transactionId));
+        return new Response("Async | Store value " + value + " under the key " + key + " result " + isLocalyStored, isLocalyStored, request);
     }
 }

@@ -25,6 +25,8 @@ public class SyncAddValue extends Message {
 
     String key = items.get(1).toString();
     String value = items.get(2).toString();
+    String transactionId = items.get(3).toString();
+    Client client = new Client();
 
     public boolean addValueToKV() {
         return store.store(key, value);
@@ -33,8 +35,8 @@ public class SyncAddValue extends Message {
     @Override
     public Response respond() {
         Boolean isLocalyStored = addValueToKV();
-        Client client = new Client();
-        client.syncSendToSlave(client.write(key,value));
+
+        client.syncSendToSlave(client.write(key, value,transactionId));
         Response res = new Response("Sync | Store value " + value + " under the key " + key + " result " + isLocalyStored, isLocalyStored, request);
         return res;
     }

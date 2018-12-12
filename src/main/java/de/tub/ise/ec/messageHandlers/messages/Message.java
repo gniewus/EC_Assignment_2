@@ -18,6 +18,7 @@ public abstract class Message {
     List<Serializable> items;
     Boolean isMaster;
 
+
     Message(Request request, KeyValueInterface store){
         this.request=request;
         this.store=store;

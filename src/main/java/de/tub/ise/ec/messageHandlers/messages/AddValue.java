@@ -25,6 +25,7 @@ public class AddValue extends Message {
 
     String key = items.get(1).toString();
     String value = items.get(2).toString();
+    String transactionId = items.get(3).toString();
 
     public boolean addValueToKV() {
         return store.store(key, value);
@@ -33,6 +34,7 @@ public class AddValue extends Message {
     @Override
     public Response respond() {
         Boolean isLocalyStored = addValueToKV();
+        log.info("Staleness Stop | "+key +" | "+transactionId);
         Response res = new Response("Store value " + value + " under the key " + key + " result " + isLocalyStored, isLocalyStored, request);
         return res;
     }

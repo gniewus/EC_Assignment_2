@@ -20,11 +20,14 @@ public class MasterMessageFactory {
                 return createReadValue(request, store);
             case "syncAddValue":
                 return createSyncAddValue(request, store);
-
             case "asyncAddValue":
                 return createAsyncAddValue(request, store);
             case "deleteKey":
                 return createDeleteKey(request, store);
+            case "syncDeleteKey":
+                return createAsyncDeleteKey(request, store);
+            case "asyncDeleteKey":
+                return createSyncDeleteKey(request, store);
             case "addValue":
                 return createAddValue(request, store);
             case "updateKey":
@@ -32,6 +35,13 @@ public class MasterMessageFactory {
 
         }
         throw new IllegalArgumentException();
+    }
+
+    private static Message createAsyncDeleteKey(Request request, KeyValueInterface store) {
+        return new AsyncDeleteKey(request, store);
+    }
+    private static Message createSyncDeleteKey(Request request, KeyValueInterface store) {
+        return new SyncDeleteKey(request, store);
     }
 
     private static Message createAsyncAddValue(Request request, KeyValueInterface store) {
