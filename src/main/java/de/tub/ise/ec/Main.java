@@ -20,18 +20,24 @@ public class Main {
        // client.syncSendToSlave(client.write("n", "0"));
        // client.syncSendToSlave(client.read("1"));
 //       // client.syncSendToSlave(client.listKeys());
-//        client.syncSendToMaster(client.write("X", "valuex"));
-//        client.syncSendToMaster(client.write("Y", "valuey"));
-//        client.syncSendToMaster(client.listKeys());
-//        client.syncSendToMaster(client.read("X"));
-//        client.syncSendToMaster(client.delete("X"));
-//        client.syncSendToMaster(client.listKeys());
+//        client.sendSyncMsgToMaster(client.write("X", "valuex"));
+//        client.sendSyncMsgToMaster(client.write("Y", "valuey"));
+//        client.sendSyncMsgToMaster(client.listKeys());
+//        client.sendSyncMsgToMaster(client.read("X"));
+//        client.sendSyncMsgToMaster(client.delete("X"));
+//        client.sendSyncMsgToMaster(client.listKeys());
 
-        client.syncSendToMaster(client.syncWrite("C", "valuex"));
+        client.sendSyncMsgToMaster(client.syncWrite("C", "valuex"));
+        client.sendSyncMsgToMaster(client.read("C"));
 
-        client.syncSendToMaster(client.listKeys());
+        client.sendSyncMsgToMaster(client.asyncWrite("Q", "Werty"));
+        client.sendSyncMsgToMaster(client.read("Q"));
+
+        client.sendSyncMsgToMaster(client.listKeys());
         client.syncSendToSlave(client.listKeys());
 
+        client.sendSyncMsgToMaster(client.asyncDelete("Q"));
+        client.sendSyncMsgToMaster(client.syncDelete("Q"));
 
     }
 

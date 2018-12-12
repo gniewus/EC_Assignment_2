@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * Implementation of a CRUD client
@@ -41,7 +42,7 @@ public class Client implements ICrud {
 
         senderSlave = new Sender(this.hostSlave, this.portSlave);
         senderMaster = new Sender(this.hostMaster, this.portMaster);
-        log.info("Default client with two senders on ports " + portMaster + "," + portSlave + " and host " + hostMaster + "," + hostSlave + " created. ");
+        //log.info("Default client with two senders on ports " + portMaster + "," + portSlave + " and host " + hostMaster + "," + hostSlave + " created. ");
     }
 
     /**
@@ -150,41 +151,65 @@ public class Client implements ICrud {
         return new Request("listKeys", "storageMessageHandler", "localSampleClient");
     }
 
+    public String generateId(String key){
+        String uniqueID = UUID.randomUUID().toString();
+        uniqueID= uniqueID.substring(0, uniqueID.length() - 28);
+        String id = key+"-"+uniqueID;
+        return id;
+    }
+
     public Request read(String key) {
 
-        return new Request(Arrays.asList("readValue", key), "storageMessageHandler", "localSampleClient");
+        return new Request(Arrays.asList("readValue", key,generateId(key)), "storageMessageHandler", "localSampleClient");
         //Response response = sendRequest(request);
         //logResponse(response);
         //return response.getItems().get(0);
     }
 
     @Override
-    public Request write(String key, Serializable value) {
-        return new Request(Arrays.asList("addValue", key, value), "storageMessageHandler", "localSampleClient");
+    public Request write(String key, Serializable value, String id) {
+        if(id.isEmpty()){
+            return new Request(Arrays.asList("addValue", key, value,generateId(key)), "storageMessageHandler", "localSampleClient");
+        }else
+        {return new Request(Arrays.asList("addValue", key, value,id), "storageMessageHandler", "localSampleClient");}
+
     }
 
     @Override
     public Request asyncWrite(String key, Serializable value) {
-        return new Request(Arrays.asList("asyncAddValue", key, value), "storageMessageHandler", "localSampleClient");
+        return new Request(Arrays.asList("asyncAddValue", key, value,generateId(key)), "storageMessageHandler", "localSampleClient");
     }
 
     @Override
     public Request syncWrite(String key, Serializable value) {
-        return new Request(Arrays.asList("syncAddValue", key, value), "storageMessageHandler", "localSampleClient");
+        return new Request(Arrays.asList("syncAddValue", key, value,generateId(key)), "storageMessageHandler", "localSampleClient");
     }
 
     @Override
-    public Request delete(String key) {
-        return new Request(Arrays.asList("deleteKey", key), "storageMessageHandler", "localSampleClient");
+    public Request delete(String key,String id) {
+        if(id.isEmpty()){
+            return new Request(Arrays.asList("deleteKey", key,id), "storageMessageHandler", "localSampleClient");
+        }else {
+            return new Request(Arrays.asList("deleteKey", key,generateId(key)), "storageMessageHandler", "localSampleClient");
+        }
+    }
+
+    public Request syncDelete(String key) {
+        return new Request(Arrays.asList("syncDeleteKey", key,generateId(key)), "storageMessageHandler", "localSampleClient");
+    }
+
+    public Request asyncDelete(String key) {
+        return new Request(Arrays.asList("asyncDeleteKey", key,generateId(key)), "storageMessageHandler", "localSampleClient");
     }
 
     @Override
     public Request update(String key, Serializable value) {
-        return new Request(Arrays.asList("updateKey", key, value), "storageMessageHandler", "localSampleClient");
+        //TODO Trzeba jescze update synchronicze i asynchronicznie zaimplementowac, prawda ?
+        return new Request(Arrays.asList("updateKey", key, value,generateId(key)), "storageMessageHandler", "localSampleClient");
     }
 
-    public void syncSendToMaster(Request request) {
-        log.debug("Sent request: {} to master", request.getItems().get(0));
+    public void sendSyncMsgToMaster(Request request) {
+        log.debug("Sent request: {} to master ", request.getItems().toString());
         Response response = senderMaster.sendMessage(request, 5000);
         logResponse(response);
     }
@@ -227,6 +252,7 @@ public class Client implements ICrud {
             log.info("Response: " + response.getResponseMessage() + " " + response.getItems());
         }
     }
+
 
     private class asyncCallback implements AsyncCallbackRecipient {
 

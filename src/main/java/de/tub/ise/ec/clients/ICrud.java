@@ -13,16 +13,14 @@ public interface ICrud {
 
     public Object read(String key);
 
-    public Request write(String key, Serializable value);
+    public Request write(String key, Serializable value,String id);
 
     public Request asyncWrite(String key, Serializable value);
 
     public Request syncWrite(String key, Serializable value);
 
+    public Request delete(String key, String id);
+
     public Request update(String key, Serializable value);
-
-    public Request delete(String key);
-
-
 
 }
