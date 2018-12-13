@@ -34,7 +34,7 @@ public class Main {
         client.sendSyncMsgToMaster(client.read("Q"));
 
         client.sendSyncMsgToMaster(client.listKeys());
-        client.syncSendToSlave(client.listKeys());
+        client.sendSyncMsgToMaster(client.listKeys());
 
         client.sendSyncMsgToMaster(client.asyncDelete("Q"));
         client.sendSyncMsgToMaster(client.syncDelete("Q"));

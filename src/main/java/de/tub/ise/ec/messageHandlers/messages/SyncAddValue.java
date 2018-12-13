@@ -36,7 +36,7 @@ public class SyncAddValue extends Message {
     public Response respond() {
         Boolean isLocalyStored = addValueToKV();
 
-        client.syncSendToSlave(client.write(key, value,transactionId));
+        client.sendSyncMsgToSlave(client.write(key, value,transactionId));
         Response res = new Response("Sync | Store value " + value + " under the key " + key + " result " + isLocalyStored, isLocalyStored, request);
         return res;
     }

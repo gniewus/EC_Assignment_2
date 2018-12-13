@@ -34,7 +34,7 @@ public class AsyncDeleteKey extends Message {
     public Response respond() {
         deleteLocaly(key);
         log.info("Value stored on master | {} | {}",key,transactionId);
-        client.asyncSendToSlave(client.delete(key,transactionId));
+        client.sendAsyncMsgToSlave(client.delete(key,transactionId));
         return new Response("Key " + key + " deleted. ", true, request );
     }
 }

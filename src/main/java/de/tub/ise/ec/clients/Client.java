@@ -208,27 +208,28 @@ public class Client implements ICrud {
         return new Request(Arrays.asList("updateKey", key, value,generateId(key)), "storageMessageHandler", "localSampleClient");
     }
 
-    public void sendSyncMsgToMaster(Request request) {
+    public Response sendSyncMsgToMaster(Request request) {
         log.debug("Sent request: {} to master ", request.getItems().toString());
         Response response = senderMaster.sendMessage(request, 5000);
-        logResponse(response);
+        return response;
     }
 
-    public void syncSendToSlave(Request request) {
+    public Response sendSyncMsgToSlave(Request request) {
         log.debug("Sent sync request: {} to slave", request.getItems().get(0));
         Response response = senderSlave.sendMessage(request, 5000);
         logResponse(response);
+        return response;
     }
+//Not needed
+//    public Boolean sendAsyncMsgToMaster(Request request) {
+//        log.debug("Sent async request: {} to master", request.getItems().get(0));
+//        asyncCallback AsyncCallback = new asyncCallback();
+//        Boolean messageSent = senderMaster.sendMessageAsync(request, AsyncCallback);
+//        callbackFunction(AsyncCallback);
+//        return messageSent;
+//    }
 
-    public void asyncSendToMaster(Request request) {
-        log.debug("Sent async request: {} to master", request.getItems().get(0));
-        asyncCallback AsyncCallback = new asyncCallback();
-        Boolean messageSent = senderMaster.sendMessageAsync(request, AsyncCallback);
-        callbackFunction(AsyncCallback);
-
-    }
-
-    public void asyncSendToSlave(Request request) {
+    public void sendAsyncMsgToSlave(Request request) {
 
         asyncCallback AsyncCallback = new asyncCallback();
         Boolean messsageSent = senderSlave.sendMessageAsync(request, AsyncCallback);

@@ -1,7 +1,6 @@
 package de.tub.ise.ec.messageHandlers.messages;
 
 import de.tub.ise.ec.clients.Client;
-import de.tub.ise.ec.exceptions.KeyStoreException;
 import de.tub.ise.ec.kv.KeyValueInterface;
 import de.tub.ise.hermes.Request;
 import de.tub.ise.hermes.Response;
@@ -44,7 +43,7 @@ public class SyncDeleteKey extends Message {
     @Override
     public Response respond() {
         if (deleteLocaly(key)) {
-            client.syncSendToSlave(client.delete(key,transactionId));
+            client.sendSyncMsgToSlave(client.delete(key,transactionId));
             return new Response("Key " + key + " deleted. ", true, request );
         }else {
             return new Response("Failed to delete key "+key,false,request);
