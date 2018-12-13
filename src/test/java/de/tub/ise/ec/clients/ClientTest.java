@@ -1,12 +1,6 @@
 package de.tub.ise.ec.clients;
 
 import de.tub.ise.ec.servers.MasterServer;
-import de.tub.ise.hermes.Request;
-import de.tub.ise.hermes.Response;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.Arrays;
 
 public class ClientTest {
     private Client client = new Client();
@@ -28,7 +22,7 @@ public class ClientTest {
     public void cleanUp(){
         slaveServer.terminate();
     }*/
-
+/*
     @Test
     public void generalOperationsTest(){
         //:TODO Refactor test
@@ -59,7 +53,7 @@ public class ClientTest {
         Response response = client.getSenderSlave().sendMessage(request, 5000);
         Assert.assertEquals("0", response.getItems().get(0));
         Assert.assertTrue(response.responseCode());
-    }
+    }*/
 
 
 
