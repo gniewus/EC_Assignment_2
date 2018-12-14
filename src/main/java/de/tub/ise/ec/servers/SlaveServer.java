@@ -51,7 +51,7 @@ public class SlaveServer implements IServer{
 
     public SlaveServer(){
         port = 8000;
-        host = "127.0.0.1"; // localhost
+        host = "0.0.0.0"; // localhost
 
         // Server: register handler
         requestHandlerRegistry = RequestHandlerRegistry.getInstance();

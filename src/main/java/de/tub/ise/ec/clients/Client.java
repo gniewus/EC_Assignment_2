@@ -35,10 +35,10 @@ public class Client implements ICrud {
      */
     public Client() {
         this.portSlave = 8000;
-        this.hostSlave = "127.0.0.1";
+        this.hostSlave = "54.93.228.91";
 
         this.portMaster = 8001;
-        this.hostMaster = "127.0.0.1";
+        this.hostMaster = "34.246.180.139";
 
         senderSlave = new Sender(this.hostSlave, this.portSlave);
         senderMaster = new Sender(this.hostMaster, this.portMaster);
@@ -53,8 +53,12 @@ public class Client implements ICrud {
     public Client(int port, String host) {
         this.portMaster = port;
         this.hostMaster = host;
+        this.portSlave = 8000;
+        this.hostSlave = "54.93.228.91";
 
         senderMaster = new Sender(hostMaster, portMaster);
+        senderSlave = new Sender(this.hostSlave, this.portSlave);
+
         log.info("Client on a port " + port + " and host " + host + " created. ");
     }
     /**

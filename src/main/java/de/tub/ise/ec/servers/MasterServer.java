@@ -57,7 +57,7 @@ public class MasterServer implements IServer {
         //super(8001, "127.0.0.1");
         // For simplicity let's run them on different ports
         this.port = 8001;
-        this.host = "127.0.0.1";
+        this.host = "0.0.0.0";
         // Server: register handler
         requestHandlerRegistry = RequestHandlerRegistry.getInstance();
         //requestHandlerRegistry.registerHandler("sampleMessageHandler", new SampleMessageHandler());

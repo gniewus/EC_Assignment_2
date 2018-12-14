@@ -14,19 +14,21 @@ public class Main {
     public static void main(String[] args) {
 
         Client client = new Client();
-        MasterServer master = new MasterServer(8001, "127.0.0.1");
-        SlaveServer slave = new SlaveServer(8000, "127.0.0.1");
+       // MasterServer master = new MasterServer();
+     //  SlaveServer slave = new SlaveServer(8000, "127.0.0.1");
 
        // client.syncSendToSlave(client.write("n", "0"));
        // client.syncSendToSlave(client.read("1"));
-//       // client.syncSendToSlave(client.listKeys());
+        client.sendSyncMsgToSlave(client.write("n", "0","testt"));
+        client.sendSyncMsgToSlave(client.listKeys());
+        client.sendSyncMsgToSlave(client.delete("n","testt"));
 //        client.sendSyncMsgToMaster(client.write("X", "valuex"));
 //        client.sendSyncMsgToMaster(client.write("Y", "valuey"));
 //        client.sendSyncMsgToMaster(client.listKeys());
 //        client.sendSyncMsgToMaster(client.read("X"));
 //        client.sendSyncMsgToMaster(client.delete("X"));
 //        client.sendSyncMsgToMaster(client.listKeys());
-
+//
         client.sendSyncMsgToMaster(client.syncWrite("C", "valuex"));
         client.sendSyncMsgToMaster(client.read("C"));
 
