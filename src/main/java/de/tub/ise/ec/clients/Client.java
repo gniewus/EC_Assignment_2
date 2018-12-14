@@ -7,6 +7,8 @@ import de.tub.ise.hermes.Sender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
@@ -30,6 +32,7 @@ public class Client implements ICrud {
     private Sender senderSlave;
     private String masterHandler = "storageMessageHandler";
     private String slaveHandler = "storageMessageHandler";
+
     /**
      * Default constructor with hardcoded test values.
      */
@@ -47,6 +50,7 @@ public class Client implements ICrud {
 
     /**
      * Constructor can take two parameters to start master sender.
+     *
      * @param port
      * @param host
      */
@@ -61,8 +65,10 @@ public class Client implements ICrud {
 
         log.info("Client on a port " + port + " and host " + host + " created. ");
     }
+
     /**
      * Constructor can take four parameters to start and parametrise both master and slave sender.
+     *
      * @param portSlave
      * @param hostSlave
      * @param portMaster
@@ -135,10 +141,43 @@ public class Client implements ICrud {
         this.slaveHandler = slaveHandler;
     }
 
-    private void crazyUpdate(String key, String value) throws InterruptedException {
+    public void crazyUpdateAsynchronic() throws InterruptedException {
         for (int i = 0; i < 100; i++) {
+            int randomNum = ThreadLocalRandom.current().nextInt(0, 2);
+            Request req = listKeys();
+            switch (randomNum) {
+                case 0:
+                    req = asyncWrite("x", "req" + i);
+                    break;
+                case 1:
+                    req = asyncDelete("x");
+                    break;
+                case 2:
+                    req = asyncUpdate("x", "req" + i);
+                    break;
+            }
+            sendSyncMsgToMaster(req);
             sleep(50);
-            update(key, value);
+        }
+    }
+
+    public void crazyUpdateSynchronic() throws InterruptedException {
+        for (int i = 0; i < 100; i++) {
+            int randomNum = ThreadLocalRandom.current().nextInt(0, 2);
+            Request req = listKeys();
+            switch (randomNum) {
+                case 0:
+                    req = syncWrite("x", "req" + i);
+                    break;
+                case 1:
+                    req = syncDelete("x");
+                    break;
+                case 2:
+                    req = syncWrite("x", "req" + i);
+                    break;
+            }
+            sendSyncMsgToMaster(req);
+            sleep(50);
         }
     }
 
@@ -155,16 +194,16 @@ public class Client implements ICrud {
         return new Request("listKeys", "storageMessageHandler", "localSampleClient");
     }
 
-    public String generateId(String key){
+    public String generateId(String key) {
         String uniqueID = UUID.randomUUID().toString();
-        uniqueID= uniqueID.substring(0, uniqueID.length() - 28);
-        String id = key+"-"+uniqueID;
+        uniqueID = uniqueID.substring(0, uniqueID.length() - 28);
+        String id = key + "-" + uniqueID;
         return id;
     }
 
     public Request read(String key) {
 
-        return new Request(Arrays.asList("readValue", key,generateId(key)), "storageMessageHandler", "localSampleClient");
+        return new Request(Arrays.asList("readValue", key, generateId(key)), "storageMessageHandler", "localSampleClient");
         //Response response = sendRequest(request);
         //logResponse(response);
         //return response.getItems().get(0);
@@ -172,44 +211,57 @@ public class Client implements ICrud {
 
     @Override
     public Request write(String key, Serializable value, String id) {
-        if(id.isEmpty()){
-            return new Request(Arrays.asList("addValue", key, value,generateId(key)), "storageMessageHandler", "localSampleClient");
-        }else
-        {return new Request(Arrays.asList("addValue", key, value,id), "storageMessageHandler", "localSampleClient");}
+        if (id.isEmpty()) {
+            return new Request(Arrays.asList("addValue", key, value, generateId(key)), "storageMessageHandler", "localSampleClient");
+        } else {
+            return new Request(Arrays.asList("addValue", key, value, id), "storageMessageHandler", "localSampleClient");
+        }
 
     }
 
     @Override
     public Request asyncWrite(String key, Serializable value) {
-        return new Request(Arrays.asList("asyncAddValue", key, value,generateId(key)), "storageMessageHandler", "localSampleClient");
+        return new Request(Arrays.asList("asyncAddValue", key, value, generateId(key)), "storageMessageHandler", "localSampleClient");
     }
 
     @Override
     public Request syncWrite(String key, Serializable value) {
-        return new Request(Arrays.asList("syncAddValue", key, value,generateId(key)), "storageMessageHandler", "localSampleClient");
+        return new Request(Arrays.asList("syncAddValue", key, value, generateId(key)), "storageMessageHandler", "localSampleClient");
     }
 
     @Override
-    public Request delete(String key,String id) {
-        if(id.isEmpty()){
-            return new Request(Arrays.asList("deleteKey", key,id), "storageMessageHandler", "localSampleClient");
-        }else {
-            return new Request(Arrays.asList("deleteKey", key,generateId(key)), "storageMessageHandler", "localSampleClient");
+    public Request delete(String key, String id) {
+        if (id.isEmpty()) {
+            return new Request(Arrays.asList("deleteKey", key, id), "storageMessageHandler", "localSampleClient");
+        } else {
+            return new Request(Arrays.asList("deleteKey", key, generateId(key)), "storageMessageHandler", "localSampleClient");
         }
     }
 
     public Request syncDelete(String key) {
-        return new Request(Arrays.asList("syncDeleteKey", key,generateId(key)), "storageMessageHandler", "localSampleClient");
+        return new Request(Arrays.asList("syncDeleteKey", key, generateId(key)), "storageMessageHandler", "localSampleClient");
     }
 
     public Request asyncDelete(String key) {
-        return new Request(Arrays.asList("asyncDeleteKey", key,generateId(key)), "storageMessageHandler", "localSampleClient");
+        return new Request(Arrays.asList("asyncDeleteKey", key, generateId(key)), "storageMessageHandler", "localSampleClient");
+    }
+
+    public Request syncUpdate(String key, String value) {
+        return new Request(Arrays.asList("syncUpdateKey", key,value, generateId(key)), "storageMessageHandler", "localSampleClient");
+    }
+
+    public Request asyncUpdate(String key, String value) {
+        return new Request(Arrays.asList("asyncUpdateKey", key,value ,generateId(key)), "storageMessageHandler", "localSampleClient");
     }
 
     @Override
-    public Request update(String key, Serializable value) {
-        //TODO Trzeba jescze update synchronicze i asynchronicznie zaimplementowac, prawda ?
-        return new Request(Arrays.asList("updateKey", key, value,generateId(key)), "storageMessageHandler", "localSampleClient");
+    public Request update(String key, Serializable value, String id) {
+        if (id.isEmpty()) {
+            return new Request(Arrays.asList("updateKey", key, value, generateId(key)), "storageMessageHandler", "localSampleClient");
+        } else {
+            return new Request(Arrays.asList("updateKey", key, value, id), "storageMessageHandler", "localSampleClient");
+        }
+
     }
 
     public Response sendSyncMsgToMaster(Request request) {
