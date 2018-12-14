@@ -29,17 +29,25 @@ public class Main {
 //        client.sendSyncMsgToMaster(client.delete("X"));
 //        client.sendSyncMsgToMaster(client.listKeys());
 //
-        client.sendSyncMsgToMaster(client.syncWrite("C", "valuex"));
-        client.sendSyncMsgToMaster(client.read("C"));
+//        client.sendSyncMsgToMaster(client.syncWrite("C", "valuex"));
+//        client.sendSyncMsgToMaster(client.read("C"));
+//
+//        client.sendSyncMsgToMaster(client.asyncWrite("Q", "Werty"));
+//        client.sendSyncMsgToMaster(client.read("Q"));
+//
+//        client.sendSyncMsgToMaster(client.listKeys());
+//        client.sendSyncMsgToMaster(client.listKeys());
+//
+//        client.sendSyncMsgToMaster(client.asyncDelete("Q"));
+//        client.sendSyncMsgToMaster(client.syncDelete("Q"));
+        try{
 
-        client.sendSyncMsgToMaster(client.asyncWrite("Q", "Werty"));
-        client.sendSyncMsgToMaster(client.read("Q"));
+            client.crazyUpdateAsynchronic();
+            client.crazyUpdateSynchronic();
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
 
-        client.sendSyncMsgToMaster(client.listKeys());
-        client.sendSyncMsgToMaster(client.listKeys());
-
-        client.sendSyncMsgToMaster(client.asyncDelete("Q"));
-        client.sendSyncMsgToMaster(client.syncDelete("Q"));
 
     }
 

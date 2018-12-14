@@ -13,7 +13,7 @@ import java.lang.invoke.MethodHandles;
  * Class that represents update keys message
  * It is sent by client to master, and trigger synchronous replication .
  *
- * @author Jacek Janczura
+ * @author Tomasz Tkaczyk
  */
 public class SyncUpdateKey extends Message {
 

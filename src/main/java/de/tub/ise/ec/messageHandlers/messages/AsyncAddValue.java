@@ -10,9 +10,10 @@ import org.slf4j.LoggerFactory;
 import java.lang.invoke.MethodHandles;
 
 /**
- * Class that represents add value message
+ * Class that represents add value message.
+ * It is sent from client to master, and triggers asynchronous replication.
  *
- * @author Jacek Janczura
+ * @author Tomasz Tkaczyk
  */
 
 public class AsyncAddValue extends Message {

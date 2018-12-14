@@ -11,8 +11,8 @@ import java.lang.invoke.MethodHandles;
 
 /**
  * Class that represents add value message
- *
- * @author Jacek Janczura
+ * It is sent from client to master, and triggers synchronous replication.
+ * @author Tomasz Tkaczyk
  */
 
 public class SyncAddValue extends Message {

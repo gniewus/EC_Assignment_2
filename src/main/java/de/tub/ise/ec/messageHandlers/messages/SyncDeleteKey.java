@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory;
 import java.lang.invoke.MethodHandles;
 
 /**
- * Class that represents add value message
- *
- * @author Jacek Janczura
+ * Class that represents delete key-value pairs message.
+ * It is sent from client to master, and triggers synchronous replication.
+ * @author Tomasz Tkaczyk
  */
 
 public class SyncDeleteKey extends Message {
@@ -26,7 +26,6 @@ public class SyncDeleteKey extends Message {
     Client client = new Client();
 
     private Boolean deleteLocaly(String key) {
-        //TODO Nie trzeba requestow do KV zawsze w jakies try catach trzmac?
         try {
             store.delete(key);
             return true;

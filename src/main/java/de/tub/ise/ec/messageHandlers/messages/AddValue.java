@@ -10,7 +10,8 @@ import org.slf4j.LoggerFactory;
 import java.lang.invoke.MethodHandles;
 
 /**
- * Class that represents add value message
+ * Class that represents add value message.
+ * This is internal message which is sent from Master to Slave
  *
  * @author Jacek Janczura
  */

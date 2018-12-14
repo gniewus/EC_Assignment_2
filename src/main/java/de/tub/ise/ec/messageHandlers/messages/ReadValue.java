@@ -6,7 +6,6 @@ import de.tub.ise.hermes.Response;
 
 /**
  * Class that represents read value message
- *
  * @author Jacek Janczura
  */
 

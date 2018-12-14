@@ -10,7 +10,7 @@ import java.lang.invoke.MethodHandles;
 
 /**
  * Class that represents delete key message
- *
+ * This is internal message which is sent from Master to Slave
  * @author Jacek Janczura
  */
 

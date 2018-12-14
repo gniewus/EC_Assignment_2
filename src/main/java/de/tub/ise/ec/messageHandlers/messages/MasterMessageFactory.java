@@ -22,6 +22,10 @@ public class MasterMessageFactory {
                 return createSyncAddValue(request, store);
             case "asyncAddValue":
                 return createAsyncAddValue(request, store);
+            case "syncUpdateKey":
+                return createSyncUpdateKey(request, store);
+            case "asyncUpdateKey":
+                return createAsyncUpdateKey(request, store);
             case "deleteKey":
                 return createDeleteKey(request, store);
             case "syncDeleteKey":
@@ -66,6 +70,12 @@ public class MasterMessageFactory {
 
     private static Message createDeleteKey(Request request, KeyValueInterface store) {
         return new DeleteKey(request, store);
+    }
+    private static Message createSyncUpdateKey(Request request, KeyValueInterface store) {
+        return new SyncDeleteKey(request, store);
+    }
+    private static Message createAsyncUpdateKey(Request request, KeyValueInterface store) {
+        return new AsyncDeleteKey(request, store);
     }
 /*    private static Message createUpdateKey(Request request, KeyValueInterface store) {
         return new UpdateKey(request, store);
