@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
+import java.util.ResourceBundle;
 import java.util.UUID;
 
 /**
@@ -29,18 +30,19 @@ public class Client implements ICrud {
     private String hostMaster;
     private Sender senderMaster;
     private Sender senderSlave;
-    private static final String STORAGE_MESSAGE_HANDLER = "STORAGE_MESSAGE_HANDLER";
+    private static final String STORAGE_MESSAGE_HANDLER = "storageMessageHandler";
     private static final String LOCAL_HOST = "127.0.0.1";
+    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("config");
 
     /**
      * Default constructor with hardcoded test values.
      */
     public Client() {
-        this.portSlave = 8000;
-        this.hostSlave = LOCAL_HOST;
+        this.portSlave = Integer.valueOf(RESOURCE_BUNDLE.getString("portSlave"));
+        this.hostSlave = RESOURCE_BUNDLE.getString("hostSlave");
 
-        this.portMaster = 8001;
-        this.hostMaster = LOCAL_HOST;
+        this.portMaster = Integer.valueOf(RESOURCE_BUNDLE.getString("portMaster"));
+        this.hostMaster = RESOURCE_BUNDLE.getString("hostMaster");
 
         senderSlave = new Sender(this.hostSlave, this.portSlave);
         senderMaster = new Sender(this.hostMaster, this.portMaster);
@@ -69,8 +71,8 @@ public class Client implements ICrud {
     /**
      * Constructor creates the client. It can take four parameters to parametrise both master and slave sender.
      *
-     * @param portSlave Slave server port
-     * @param hostSlave Slave server host
+     * @param portSlave  Slave server port
+     * @param hostSlave  Slave server host
      * @param portMaster Master server port
      * @param hostMaster Master server host
      */
@@ -110,6 +112,7 @@ public class Client implements ICrud {
 
     /**
      * This method safely "stops" the main thread for @timeperiod milliseconds.
+     *
      * @param timeperiod umber of miliseconds to sleep
      */
     private void sleep(int timeperiod) {
@@ -123,6 +126,7 @@ public class Client implements ICrud {
 
     /**
      * Methode used to generate unique transaction ID. UUID.randomUUID() is used which is the correct approach in java to generate unique ID.
+     *
      * @param key key from the KV store to generate ID for
      * @return unique transaction ID generated for the key from KV store
      */
@@ -134,6 +138,7 @@ public class Client implements ICrud {
 
     /**
      * Method builds the request to list all the keys in a keystore.
+     *
      * @return ready request to send to the server
      */
     public Request listKeys() {
@@ -142,6 +147,7 @@ public class Client implements ICrud {
 
     /**
      * Method builds the request - read the value for a key.
+     *
      * @param key key to read the value
      * @return ready request to send to the server
      */
@@ -151,18 +157,20 @@ public class Client implements ICrud {
 
     /**
      * Method to write the value in a KV store with a custom transaction ID.
-     * @param key Key in a KV store
+     *
+     * @param key   Key in a KV store
      * @param value Value which will be written in for a key
-     * @param id Custom transaction ID
+     * @param id    Custom transaction ID
      * @return
      */
     public Request write(String key, Serializable value, String id) {
-            return new Request(Arrays.asList("addValue", key, value, id), STORAGE_MESSAGE_HANDLER, LOCAL_SAMPLE_CLIENT);
+        return new Request(Arrays.asList("addValue", key, value, id), STORAGE_MESSAGE_HANDLER, LOCAL_SAMPLE_CLIENT);
     }
 
     /**
      * Method to write the value in a KV store.
-     * @param key Key in a KV store
+     *
+     * @param key   Key in a KV store
      * @param value Value which will be written in for a key
      * @return ready request to send to the server
      */
@@ -173,7 +181,8 @@ public class Client implements ICrud {
 
     /**
      * This method triggers asynchronous replication on a write request. All replicas will be asynchronously replicated.
-     * @param key Key in a KV store
+     *
+     * @param key   Key in a KV store
      * @param value Value which will be written in for a key
      * @return ready request to send to the server
      */
@@ -184,7 +193,8 @@ public class Client implements ICrud {
 
     /**
      * This method triggers synchronous replication on a write request. All replicas will be synchronously replicated.
-     * @param key Key in a KV store
+     *
+     * @param key   Key in a KV store
      * @param value Value which will be written in for a key
      * @return ready request to send to the server
      */
@@ -194,9 +204,8 @@ public class Client implements ICrud {
     }
 
     /**
-     *
      * @param key
-     * @param id Id of the transaction
+     * @param id  Id of the transaction
      * @return ready request to send to the server
      */
     @Override
@@ -218,11 +227,11 @@ public class Client implements ICrud {
     }
 
     public Request syncUpdate(String key, String value) {
-        return new Request(Arrays.asList("syncUpdateKey", key,value, generateId(key)), STORAGE_MESSAGE_HANDLER, LOCAL_SAMPLE_CLIENT);
+        return new Request(Arrays.asList("syncUpdateKey", key, value, generateId(key)), STORAGE_MESSAGE_HANDLER, LOCAL_SAMPLE_CLIENT);
     }
 
     public Request asyncUpdate(String key, String value) {
-        return new Request(Arrays.asList("asyncUpdateKey", key,value ,generateId(key)), STORAGE_MESSAGE_HANDLER, LOCAL_SAMPLE_CLIENT);
+        return new Request(Arrays.asList("asyncUpdateKey", key, value, generateId(key)), STORAGE_MESSAGE_HANDLER, LOCAL_SAMPLE_CLIENT);
     }
 
     @Override
@@ -237,6 +246,7 @@ public class Client implements ICrud {
 
     /**
      * Method which send the request to master server
+     *
      * @param request request to be sent to master
      * @return response from the master server
      */
@@ -250,6 +260,7 @@ public class Client implements ICrud {
 
     /**
      * Method which send the request to slave server
+     *
      * @param request request to be sent to slave
      * @return response from the master server
      */
@@ -262,6 +273,7 @@ public class Client implements ICrud {
 
     /**
      * Method which send the request to slave server asynchronically.
+     *
      * @param request request to be sent to the slave
      * @return response from the master server
      */
@@ -275,6 +287,7 @@ public class Client implements ICrud {
 
     /**
      * Callback function used in an asynchronous replication. Function waits for the response and returns it.
+     *
      * @param callback Asynch callback to observe and to waight for the rsponsemessage.
      * @return response from the server
      */
@@ -288,6 +301,7 @@ public class Client implements ICrud {
 
     /**
      * Method to log the response message
+     *
      * @param response response from the server
      */
     private void logResponse(Response response) {
