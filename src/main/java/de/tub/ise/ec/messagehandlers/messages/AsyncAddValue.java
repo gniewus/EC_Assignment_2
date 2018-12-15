@@ -1,4 +1,4 @@
-package de.tub.ise.ec.messageHandlers.messages;
+package de.tub.ise.ec.messagehandlers.messages;
 
 import de.tub.ise.ec.clients.Client;
 import de.tub.ise.ec.kv.KeyValueInterface;
@@ -18,24 +18,24 @@ import java.lang.invoke.MethodHandles;
 
 public class AsyncAddValue extends Message {
 
-    public AsyncAddValue(Request request, KeyValueInterface store) {
-        super(request, store);
-    }
-
-    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     String key = items.get(1).toString();
     String value = items.get(2).toString();
     String transactionId = items.get(3).toString();
     Client client = new Client();
-    public boolean addValueToKV() {
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    public AsyncAddValue(Request request, KeyValueInterface store) {
+        super(request, store);
+    }
+
+    private boolean addValueToKV() {
         return store.store(key, value);
     }
 
     @Override
     public Response respond() {
-        Boolean isLocalyStored = addValueToKV();
-        log.info("Value stored on master | {} | {}",key,transactionId);
+        boolean isLocalyStored = addValueToKV();
+        log.info("Value stored | {} | {}",key,transactionId);
         client.sendAsyncMsgToSlave(client.write(key,value,transactionId));
         return new Response("Async | Store value " + value + " under the key " + key + " result " + isLocalyStored, isLocalyStored, request);
     }

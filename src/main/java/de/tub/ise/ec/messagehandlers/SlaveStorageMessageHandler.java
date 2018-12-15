@@ -1,14 +1,16 @@
-package de.tub.ise.ec.messageHandlers;
+package de.tub.ise.ec.messagehandlers;
 
 import de.tub.ise.ec.kv.FileSystemKVStore;
 import de.tub.ise.ec.kv.KeyValueInterface;
-import de.tub.ise.ec.messageHandlers.messages.Message;
-import de.tub.ise.ec.messageHandlers.messages.SlaveMessageFactory;
+import de.tub.ise.ec.messagehandlers.factories.SlaveMessageFactory;
+import de.tub.ise.ec.messagehandlers.messages.Message;
 import de.tub.ise.hermes.IRequestHandler;
 import de.tub.ise.hermes.Request;
 import de.tub.ise.hermes.Response;
 
 /**
+ * Class handles the messages sent by slave server
+ * <p>
  * Created by tomasztkaczyk on 06.12.18.
  */
 public class SlaveStorageMessageHandler implements IRequestHandler {
@@ -21,12 +23,18 @@ public class SlaveStorageMessageHandler implements IRequestHandler {
     }
 
 
+    /**
+     * Methode sends message built using message factory
+     *
+     * @param req request to be send
+     * @return response from server
+     */
     @Override
     public Response handleRequest(Request req) {
         return sendMessage(SlaveMessageFactory.getMessageType(req, store));
     }
 
-    private Response sendMessage(Message message)  {
+    private Response sendMessage(Message message) {
         return message.respond();
     }
 

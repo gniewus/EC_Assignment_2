@@ -1,4 +1,4 @@
-package de.tub.ise.ec.messageHandlers.messages;
+package de.tub.ise.ec.messagehandlers.messages;
 
 import de.tub.ise.ec.kv.KeyValueInterface;
 import de.tub.ise.hermes.Request;

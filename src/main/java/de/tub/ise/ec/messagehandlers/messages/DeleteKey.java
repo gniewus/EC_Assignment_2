@@ -1,4 +1,4 @@
-package de.tub.ise.ec.messageHandlers.messages;
+package de.tub.ise.ec.messagehandlers.messages;
 
 import de.tub.ise.ec.kv.KeyValueInterface;
 import de.tub.ise.hermes.Request;
@@ -15,17 +15,20 @@ import java.lang.invoke.MethodHandles;
  */
 
 public class DeleteKey extends Message {
+
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    String key = (String) items.get(1);
+    String id = (String) items.get(2);
+
     public DeleteKey(Request request, KeyValueInterface store) {
         super(request,store);
     }
-    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private void deleteLocaly(String key){
         store.delete(key);
 
     }
-    String key = (String) items.get(1);
-    String id = (String) items.get(2);
 
     @Override
     public Response respond() {

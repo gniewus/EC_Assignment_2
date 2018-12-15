@@ -1,4 +1,4 @@
-package de.tub.ise.ec.messageHandlers.messages;
+package de.tub.ise.ec.messagehandlers.messages;
 
 import de.tub.ise.ec.clients.Client;
 import de.tub.ise.ec.kv.KeyValueInterface;
@@ -17,23 +17,23 @@ import java.lang.invoke.MethodHandles;
 
 public class AsyncDeleteKey extends Message {
 
+    String key = (String) items.get(1);
+    String transactionId = (String) items.get(2);
+    Client client = new Client();
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     public AsyncDeleteKey(Request request, KeyValueInterface store) {
         super(request, store);
     }
 
-    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     private void deleteLocaly(String key){
         store.delete(key);
     }
-    String key = (String) items.get(1);
-    String transactionId = (String) items.get(2);
-    Client client = new Client();
 
     @Override
     public Response respond() {
         deleteLocaly(key);
-        log.info("Value stored on master | {} | {}",key,transactionId);
+        log.info("Value stored | {} | {}",key,transactionId);
         client.sendAsyncMsgToSlave(client.delete(key,transactionId));
         return new Response("Key " + key + " deleted. ", true, request );
     }

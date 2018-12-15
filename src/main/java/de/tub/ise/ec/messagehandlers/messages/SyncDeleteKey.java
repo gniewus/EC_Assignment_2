@@ -1,4 +1,4 @@
-package de.tub.ise.ec.messageHandlers.messages;
+package de.tub.ise.ec.messagehandlers.messages;
 
 import de.tub.ise.ec.clients.Client;
 import de.tub.ise.ec.kv.KeyValueInterface;
@@ -42,7 +42,7 @@ public class SyncDeleteKey extends Message {
     @Override
     public Response respond() {
         if (deleteLocaly(key)) {
-            client.sendSyncMsgToSlave(client.delete(key,transactionId));
+            client.sendMsgToSlave(client.delete(key,transactionId));
             return new Response("Key " + key + " deleted. ", true, request );
         }else {
             return new Response("Failed to delete key "+key,false,request);

@@ -1,4 +1,4 @@
-package de.tub.ise.ec.messageHandlers.messages;
+package de.tub.ise.ec.messagehandlers.messages;
 
 import de.tub.ise.ec.kv.KeyValueInterface;
 import de.tub.ise.hermes.Request;
@@ -33,7 +33,7 @@ public class UpdateKey extends Message {
     public Response respond() {
         Boolean isLocalyStored = updateValueLocally();
         if(isLocalyStored){
-            log.info("Staleness Stop | "+key +" | "+transactionId);
+            log.info("Staleness Stop | {} | {}", key, transactionId);
             return new Response("Sync | Update value " + value + " under the key " + key + " result " + isLocalyStored, isLocalyStored, request);
         }
         return null;

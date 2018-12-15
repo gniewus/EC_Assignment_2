@@ -1,4 +1,4 @@
-package de.tub.ise.ec.messageHandlers.messages;
+package de.tub.ise.ec.messagehandlers.messages;
 
 import de.tub.ise.ec.clients.Client;
 import de.tub.ise.ec.kv.KeyValueInterface;
@@ -17,25 +17,25 @@ import java.lang.invoke.MethodHandles;
  */
 public class AsyncUpdateKey extends Message {
 
-    public AsyncUpdateKey(Request request, KeyValueInterface store) {
-        super(request, store);
-    }
-
-    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     String key = items.get(1).toString();
     String value = items.get(2).toString();
     String transactionId = items.get(3).toString();
     Client client = new Client();
-    Boolean isLocalyStored = false;
+    boolean isLocalyStored = false;
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public boolean updateLocally() {
+    public AsyncUpdateKey(Request request, KeyValueInterface store) {
+        super(request, store);
+    }
+
+    private boolean updateLocally() {
         return store.store(key, value);
     }
 
     @Override
     public Response respond() {
         isLocalyStored = updateLocally();
+        log.info("Value updated | {} | {}",key,transactionId);
         client.sendAsyncMsgToSlave(client.update(key, value, transactionId));
         return new Response("Async | Update value " + value + " under the key " + key + " result " + isLocalyStored, isLocalyStored, request);
     }

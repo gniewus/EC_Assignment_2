@@ -1,13 +1,10 @@
-package de.tub.ise.ec.messageHandlers.messages;
+package de.tub.ise.ec.messagehandlers.messages;
 
+import de.tub.ise.ec.clients.Client;
 import de.tub.ise.ec.kv.KeyValueInterface;
 import de.tub.ise.hermes.Request;
 import de.tub.ise.hermes.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import de.tub.ise.ec.clients.*;
 
-import java.lang.invoke.MethodHandles;
 
 /**
  * Class that represents add value message
@@ -21,8 +18,6 @@ public class SyncAddValue extends Message {
         super(request, store);
     }
 
-    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     String key = items.get(1).toString();
     String value = items.get(2).toString();
     String transactionId = items.get(3).toString();
@@ -34,10 +29,9 @@ public class SyncAddValue extends Message {
 
     @Override
     public Response respond() {
-        Boolean isLocalyStored = addValueToKV();
+        boolean isLocalyStored = addValueToKV();
 
-        client.sendSyncMsgToSlave(client.write(key, value,transactionId));
-        Response res = new Response("Sync | Store value " + value + " under the key " + key + " result " + isLocalyStored, isLocalyStored, request);
-        return res;
+        client.sendMsgToSlave(client.write(key, value,transactionId));
+        return new Response("Sync | Store value " + value + " under the key " + key + " result " + isLocalyStored, isLocalyStored, request);
     }
 }
