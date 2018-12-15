@@ -27,10 +27,8 @@ public class SlaveMessageFactory {
             case "deleteKey":
                 return createDeleteKey(request, store);
             default:
-                log.error("Wrong message type: {}", request.getItems().get(0));
-                break;
+                throw new IllegalArgumentException();
         }
-        throw new IllegalArgumentException();
     }
 
     private static Message createDeleteKey(Request request, KeyValueInterface store) {
