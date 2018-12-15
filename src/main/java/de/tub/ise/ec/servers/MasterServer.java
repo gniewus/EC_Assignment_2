@@ -1,17 +1,14 @@
 package de.tub.ise.ec.servers;
 
-import de.tub.ise.ec.messageHandlers.MasterStorageMessageHandler;
+import de.tub.ise.ec.messagehandlers.MasterStorageMessageHandler;
 import de.tub.ise.hermes.Receiver;
 import de.tub.ise.hermes.RequestHandlerRegistry;
-import de.tub.ise.hermes.Sender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * Class that extends the SlaveServer.
@@ -24,43 +21,18 @@ import java.util.Map;
 public class MasterServer implements IServer {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private Map<Integer, List<String>> operationsMap = new HashMap<>();
 
     private int port;
     private String host;
     private Receiver receiver;
-    private Sender sender;
     private RequestHandlerRegistry requestHandlerRegistry;
-
-    public MasterServer(int port, String host) {
-        //super(port, host);
-        this.port = port;
-        this.host = host;
-        // For simplicity let's run them on different ports
-
-        // Server: register handler
-        requestHandlerRegistry = RequestHandlerRegistry.getInstance();
-        requestHandlerRegistry.registerHandler("storageMessageHandler", new MasterStorageMessageHandler("./kv_store_master"));
-
-        // Server: start receiver
-        try {
-             receiver = new Receiver(port);
-            receiver.start();
-            log.info("Master listening on port : {}", port);
-
-        } catch (IOException e) {
-            log.error("Connection error: {}", e.getMessage(), e);
-        }
-    }
+    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("config");
 
     public MasterServer() {
-        //super(8001, "127.0.0.1");
-        // For simplicity let's run them on different ports
-        this.port = 8001;
-        this.host = "0.0.0.0";
-        // Server: register handler
+        this.port = Integer.valueOf(RESOURCE_BUNDLE.getString("portMaster"));
+        this.host = RESOURCE_BUNDLE.getString("hostMaster");
+
         requestHandlerRegistry = RequestHandlerRegistry.getInstance();
-        //requestHandlerRegistry.registerHandler("sampleMessageHandler", new SampleMessageHandler());
         requestHandlerRegistry.registerHandler("storageMessageHandler", new MasterStorageMessageHandler("./kv_store_master"));
 
 
@@ -75,13 +47,22 @@ public class MasterServer implements IServer {
         }
     }
 
-    private void write() {
+    public MasterServer(int port, String host) {
+        this.port = port;
+        this.host = host;
 
-    }
+        requestHandlerRegistry = RequestHandlerRegistry.getInstance();
+        requestHandlerRegistry.registerHandler("storageMessageHandler", new MasterStorageMessageHandler("./kv_store_master"));
 
-    @Override
-    public Map<Integer, List<String>> getOperationsMap() {
-        return operationsMap;
+        // Server: start receiver
+        try {
+            receiver = new Receiver(port);
+            receiver.start();
+            log.info("Master listening on port : {}", port);
+
+        } catch (IOException e) {
+            log.error("Connection error: {}", e.getMessage(), e);
+        }
     }
 
     @Override

@@ -1,14 +1,15 @@
 package de.tub.ise.ec.servers;
 
-import java.util.List;
-import java.util.Map;
-
+/**
+ * interface which must be implemented by each server.
+ *
+ * @author Jacek Janczura
+ */
 public interface IServer {
 
     public int getPort();
 
     public String getHost();
 
-    public Map<Integer, List<String>> getOperationsMap();
 
 }
