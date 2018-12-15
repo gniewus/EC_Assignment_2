@@ -16,50 +16,47 @@ public interface ICrud {
      * @param key
      * @return
      */
-    public Object read(String key);
+     Object read(String key);
 
     /**
-     * Th
-     * @param key
-     * @param value
-     * @param id
-     * @return
+     * Method to write the value
+     * @param key Key
+     * @param value Value which will be written in for a key
+     * @return ready request to send to the server
      */
-    public Request write(String key, Serializable value,String id);
+     Request write(String key, Serializable value);
 
     /**
-     * This message triggers asynchornous replication
-     * @param key
-     * @param value
-     * @return
+     * This method triggers asynchronous replication on a write request. All replicas will be asynchronously replicated.
+     * @param key Key in a KV store
+     * @param value Value which will be written in for a key
+     * @return ready request to send to the server
      */
-    public Request asyncWrite(String key, Serializable value);
+     Request asyncWrite(String key, Serializable value);
 
     /**
-     * This message triggers synchronous replication.
-     * @param key
-     * @param value
-     * @return
+     * This method triggers synchronous replication on a write request. All replicas will be synchronously replicated.
+     * @param key Key in a KV store
+     * @param value Value which will be written in for a key
+     * @return ready request to send to the server
      */
-    public Request syncWrite(String key, Serializable value);
+     Request syncWrite(String key, Serializable value);
 
 
     /**
      * This message deletes the file local on the server which reveived the message.
      * @param key
-     * @param id Id of the transaction
      * @return
      */
-    public Request delete(String key, String id);
+     Request delete(String key, String id);
 
     /**
      * This message updates locally a value under the given key.
      * @param key
      * @param value
-     * @param id
      * @return
      */
-    public Request update(String key, Serializable value,String id);
+     Request update(String key, Serializable value);
 
 
 }
