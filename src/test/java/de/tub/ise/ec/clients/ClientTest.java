@@ -1,44 +1,45 @@
 package de.tub.ise.ec.clients;
 
 import de.tub.ise.ec.servers.MasterServer;
+import de.tub.ise.ec.servers.SlaveServer;
+import de.tub.ise.hermes.Response;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class ClientTest {
     private Client client = new Client();
 
-    //MasterServer master = new MasterServer();
-    private MasterServer masterServer = new MasterServer();
+    private SlaveServer slave = new SlaveServer(8000, "127.0.0.1");
+    private MasterServer masterServer = new MasterServer(8001, "127.0.0.1");
 
-/*    @Before
-    public void setUp(){
-        if(client == null){
-            client = new Client();
-        }
-        if(slaveServer == null) {
-            slaveServer = new SlaveServer();
-        }
-    }*/
 
-/*    @After
-    public void cleanUp(){
-        slaveServer.terminate();
-    }*/
-/*
     @Test
-    public void generalOperationsTest(){
-        //:TODO Refactor test
-        client.write("1", 0,"1");
-        client.listKeys();
-        client.write("2", "1","2");
-        client.read("1");
-        client.read("2");
-        client.listKeys();
-        client.delete("1","3");
-        client.listKeys();
-        client.write("1", 4,"4");
-        client.listKeys();
+    public void generalReplicationTest() {
+        client.sendSyncMsgToMaster(client.syncWrite("C", "valuex"));
+        client.sendSyncMsgToMaster(client.read("C"));
+
+        client.sendSyncMsgToMaster(client.asyncWrite("Q", "Werty"));
+        client.sendSyncMsgToMaster(client.read("Q"));
+
+        Response listKeysMaster = client.sendSyncMsgToMaster(client.listKeys());
+        Response listKeysSlave = client.sendSyncMsgToSlave(client.listKeys());
+
+        client.sendSyncMsgToMaster(client.asyncDelete("Q"));
+        client.sendSyncMsgToMaster(client.syncDelete("Q"));
+
+        Assert.assertTrue(listKeysSlave.responseCode());
+        Assert.assertTrue(listKeysMaster.responseCode());
+        Assert.assertEquals(listKeysMaster.getItems(), listKeysSlave.getItems());
 
     }
 
+    @Test
+    public void writeToSlave() {
+        Response res = client.sendSyncMsgToSlave(client.write("test","test","testId"));
+        Assert.assertTrue(res.responseCode());
+    }
+
+    /*
     @Test
     public void addValueTest(){
         Request request = new Request(Arrays.asList("addValue", 1, 1), "storageMessageHandler", "localSampleClient");
@@ -54,7 +55,6 @@ public class ClientTest {
         Assert.assertEquals("0", response.getItems().get(0));
         Assert.assertTrue(response.responseCode());
     }*/
-
 
 
 }

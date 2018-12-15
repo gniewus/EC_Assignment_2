@@ -14,14 +14,14 @@ public class Main {
     public static void main(String[] args) {
 
         Client client = new Client();
-       // MasterServer master = new MasterServer();
-     //  SlaveServer slave = new SlaveServer(8000, "127.0.0.1");
+        //MasterServer master = new MasterServer();
+        // SlaveServer slave = new SlaveServer();
 
-       // client.syncSendToSlave(client.write("n", "0"));
-       // client.syncSendToSlave(client.read("1"));
-        client.sendSyncMsgToSlave(client.write("n", "0","testt"));
-        client.sendSyncMsgToSlave(client.listKeys());
-        client.sendSyncMsgToSlave(client.delete("n","testt"));
+        // client.syncSendToSlave(client.write("n", "0"));
+        // client.syncSendToSlave(client.read("1"));
+        // client.sendSyncMsgToSlave(client.write("n", "0","testt"));
+        // client.sendSyncMsgToSlave(client.listKeys());
+        //client.sendSyncMsgToSlave(client.delete("n","testt"));
 //        client.sendSyncMsgToMaster(client.write("X", "valuex"));
 //        client.sendSyncMsgToMaster(client.write("Y", "valuey"));
 //        client.sendSyncMsgToMaster(client.listKeys());
@@ -29,22 +29,11 @@ public class Main {
 //        client.sendSyncMsgToMaster(client.delete("X"));
 //        client.sendSyncMsgToMaster(client.listKeys());
 //
-//        client.sendSyncMsgToMaster(client.syncWrite("C", "valuex"));
-//        client.sendSyncMsgToMaster(client.read("C"));
-//
-//        client.sendSyncMsgToMaster(client.asyncWrite("Q", "Werty"));
-//        client.sendSyncMsgToMaster(client.read("Q"));
-//
-//        client.sendSyncMsgToMaster(client.listKeys());
-//        client.sendSyncMsgToMaster(client.listKeys());
-//
-//        client.sendSyncMsgToMaster(client.asyncDelete("Q"));
-//        client.sendSyncMsgToMaster(client.syncDelete("Q"));
-        try{
 
+        try {
             client.crazyUpdateAsynchronic();
             client.crazyUpdateSynchronic();
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
 
