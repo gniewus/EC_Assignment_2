@@ -15,6 +15,6 @@
     <logger name="de.tub.ise.ec" level="DEBUG" />
 
     <root level="WARN">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
     </root>
 </configuration>

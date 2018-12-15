@@ -89,7 +89,8 @@ public class Client implements ICrud {
 
 
     /**
-     * Method used for benchmarking latency and staleness of asynchronic replication. This method sends an update (In our KV store write is equal to an update) every second for 100s using asynchron. replication.
+     * Method used for benchmarking latency and staleness of asynchronic replication.
+     * This method sends an update (In our KV store write is equal to an update) every second for 100s using asynchron. replication.
      */
     public void crazyUpdateAsynchronic() {
         for (int i = 0; i < 100; i++) {
@@ -98,9 +99,9 @@ public class Client implements ICrud {
             sleep(1000);
         }
     }
-
     /**
-     * Method used for benchmarking latency and staleness of synchronic replication. This method sends an update (In our KV store write is equal to an update) every second for 100s using synchron. replication.
+     * Method used for benchmarking latency and staleness of synchronic replication.
+     * This method sends an update (In our KV store write is equal to an update) every second for 100s using synchron. replication.
      */
     public void crazyUpdateSynchronic() {
         for (int i = 0; i < 100; i++) {
