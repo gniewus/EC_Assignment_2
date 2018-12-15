@@ -3,6 +3,7 @@
 
 
 ##Implementation
+![alt text](./img/ToDo.png "Master AWS Console")
 
 
 ### Deployment
@@ -13,6 +14,7 @@ After the development phase, we've deployed two variants of our code on two AWS 
 
 ## 2) Benchmarking Latency and Staleness 
 
+Client application was started locally. 
 
 ```
     /**
