@@ -5,6 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.lang.invoke.MethodHandles;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +35,9 @@ public class FileSystemKVStore implements KeyValueInterface {
     public Object getValue(String key) {
         File f = new File(rootDir + File.separator + key);
         Object value = null;
-        try {
-            FileInputStream fi = new FileInputStream(f);
-            ObjectInputStream oi = new ObjectInputStream(fi);
+        try (FileInputStream fi = new FileInputStream(f);
+             ObjectInputStream oi = new ObjectInputStream(fi)) {
             value = oi.readObject();
-            oi.close();
         } catch (IOException | ClassNotFoundException e) {
             log.error("Retrieving value for key {} failed.", key, e);
         }
@@ -75,27 +76,24 @@ public class FileSystemKVStore implements KeyValueInterface {
     @Override
     public boolean store(String key, Serializable value) {
         File f = new File(rootDir + File.separator + key);
-        if (!f.isDirectory()) {
-            if (!f.isFile()) {
-                try {
-                    File parent = f.getParentFile();
-                    parent.mkdirs(); // create parent directories
-                    f.createNewFile();
-                } catch (IOException e) {
-                    log.error("File {} could not be created. ", f.getAbsolutePath(), e);
-                    return false;
-                }
-                // update file content
-                try {
-                    FileOutputStream fo = new FileOutputStream(f);
-                    ObjectOutputStream oo = new ObjectOutputStream(fo);
-                    oo.writeObject(value);
-                    oo.close();
-                } catch (IOException e) {
-                    log.error("Writing value to file failed for key {} .", key, e);
-                    return false;
-                }
+        if (!f.isDirectory() || !f.isFile()) {
+            try {
+                File parent = f.getParentFile();
+                parent.mkdirs(); // create parent directories
+                f.createNewFile();
+            } catch (IOException e) {
+                log.error("File {} could not be created. ", f.getAbsolutePath(), e);
+                return false;
             }
+            // update file content
+            try (FileOutputStream fo = new FileOutputStream(f);
+                 ObjectOutputStream oo = new ObjectOutputStream(fo)) {
+                oo.writeObject(value);
+            } catch (IOException e) {
+                log.error("Writing value to file failed for key {} .", key, e);
+                return false;
+            }
+
         }
         return true;
     }
@@ -106,11 +104,14 @@ public class FileSystemKVStore implements KeyValueInterface {
      * @param key
      */
     public void delete(String key) {
-        File f = new File(rootDir + File.separator + key);
-        if (!f.isDirectory()) {
-            if (f.isFile()) {
-                f.delete();
-            }
+        try {
+            cleanUp(Paths.get(rootDir + File.separator + key));
+        } catch (IOException e) {
+            log.error("Could not delete the file ", e);
         }
+    }
+
+    private void cleanUp(Path path) throws IOException {
+        Files.delete(path);
     }
 }

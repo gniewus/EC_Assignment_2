@@ -11,6 +11,7 @@ public interface KeyValueInterface {
 
     /**
      * returns a value for a given key
+     *
      * @param key
      * @return
      */
@@ -23,6 +24,7 @@ public interface KeyValueInterface {
 
     /**
      * stores a key value pair
+     *
      * @param key
      * @param value
      */
@@ -30,6 +32,7 @@ public interface KeyValueInterface {
 
     /**
      * deletes the key value pair for a given key
+     *
      * @param key
      */
     void delete(String key);
