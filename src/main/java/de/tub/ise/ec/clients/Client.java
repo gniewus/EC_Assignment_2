@@ -1,13 +1,11 @@
 package de.tub.ise.ec.clients;
 
-import de.tub.ise.hermes.Request;
 import de.tub.ise.hermes.AsyncCallbackRecipient;
+import de.tub.ise.hermes.Request;
 import de.tub.ise.hermes.Response;
 import de.tub.ise.hermes.Sender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.ThreadLocalRandom;
 
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
@@ -141,46 +139,32 @@ public class Client implements ICrud {
         this.slaveHandler = slaveHandler;
     }
 
-    public void crazyUpdateAsynchronic() throws InterruptedException {
+    /**
+     * Method used for benchmarking latency and staleness of asynchronic replication. This method sends an update (In our KV store write is equal to an update) every second for 100s using asynchron. replication.
+     */
+    public void crazyUpdateAsynchronic() {
         for (int i = 0; i < 100; i++) {
-            int randomNum = ThreadLocalRandom.current().nextInt(0, 2);
-            Request req = listKeys();
-            switch (randomNum) {
-                case 0:
-                    req = asyncWrite("x", "req" + i);
-                    break;
-                case 1:
-                    req = asyncDelete("x");
-                    break;
-                case 2:
-                    req = asyncUpdate("x", "req" + i);
-                    break;
-            }
+            Request req = asyncWrite("Asy", "req" + i);
             sendSyncMsgToMaster(req);
-            sleep(50);
+            sleep(1000);
         }
     }
 
-    public void crazyUpdateSynchronic() throws InterruptedException {
+    /**
+     * Method used for benchmarking latency and staleness of synchronic replication. This method sends an update (In our KV store write is equal to an update) every second for 100s using synchron. replication.
+     */
+    public void crazyUpdateSynchronic() {
         for (int i = 0; i < 100; i++) {
-            int randomNum = ThreadLocalRandom.current().nextInt(0, 2);
-            Request req = listKeys();
-            switch (randomNum) {
-                case 0:
-                    req = syncWrite("x", "req" + i);
-                    break;
-                case 1:
-                    req = syncDelete("x");
-                    break;
-                case 2:
-                    req = syncWrite("x", "req" + i);
-                    break;
-            }
+            Request req = syncWrite("Sy", "req" + i);
             sendSyncMsgToMaster(req);
-            sleep(50);
+            sleep(1000);
         }
     }
 
+    /**
+     * This method safely "stops" the main thread for @timeperiod milliseconds.
+     * @param timeperiod umber of miliseconds to sleep
+     */
     private void sleep(int timeperiod) {
         try {
             Thread.sleep(timeperiod);
@@ -190,10 +174,19 @@ public class Client implements ICrud {
         }
     }
 
+    /**
+     * Method builds the request to list all the keys in a keystore
+     * @return ready request to send to the server
+     */
     public Request listKeys() {
         return new Request("listKeys", "storageMessageHandler", "localSampleClient");
     }
 
+    /**
+     * Methode used to generate unique transaction ID. UUID.randomUUID() is used which is the correct approach in java to generate unique ID.
+     * @param key key from the KV store to generate ID for
+     * @return unique transaction ID generated for the key from KV store
+     */
     public String generateId(String key) {
         String uniqueID = UUID.randomUUID().toString();
         uniqueID = uniqueID.substring(0, uniqueID.length() - 28);
@@ -202,11 +195,7 @@ public class Client implements ICrud {
     }
 
     public Request read(String key) {
-
         return new Request(Arrays.asList("readValue", key, generateId(key)), "storageMessageHandler", "localSampleClient");
-        //Response response = sendRequest(request);
-        //logResponse(response);
-        //return response.getItems().get(0);
     }
 
     @Override
