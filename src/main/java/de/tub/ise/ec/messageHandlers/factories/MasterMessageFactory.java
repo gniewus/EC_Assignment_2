@@ -47,11 +47,8 @@ public class MasterMessageFactory {
             case "updateKey":
                 return createAddValue(request, store); // Update is the same as add value
             default:
-                log.error("Wrong message type: {}", request.getItems().get(0));
-                break;
-
+                throw new IllegalArgumentException();
         }
-        throw new IllegalArgumentException();
     }
 
     private static Message createAsyncDeleteKey(Request request, KeyValueInterface store) {
