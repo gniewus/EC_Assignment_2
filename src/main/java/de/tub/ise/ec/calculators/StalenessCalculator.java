@@ -18,7 +18,7 @@ import java.lang.invoke.MethodHandles;
  *
  * @author Jacek Janczura
  */
-public class StalenessCalculator implements ICalculator{
+public class StalenessCalculator implements ICalculator {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
