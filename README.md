@@ -87,7 +87,10 @@ First we've analysed synchronous replication. Figure below depicts the differenc
  
 #### Asynchronous replication 
 In case of the asynchronous replication, the average latency is almost two times faster than synchronous replication. 
+What is more, in both synchronus and asynchronous replication, staleness is comparable (ca. 130 ms). 
 
 ![alt text](./img/LatencyAsync.jpeg "Latency async")
 
 ![alt text](./img/StalenessAsync.jpeg "Staleness async")
+
+
