@@ -45,10 +45,17 @@ After 200 write operations, we manually collect the logs from Client, Master and
 
 ## 3) Analysis
 
-
+####Synchronous replication 
 After collecting the logs, we have applied standard data cleaning transformations and aggregations to compute time differences between particular events. 
 First we've analyse synchronous replication. Figure below depicts the differences in latency for 100 requests. On average one request needs 407ms to be processed (median 365ms). On a diagram we can observe 3 'peaks' which were probably caused by the network delays.      
 
-![alt text](./img/LatencySync.jpeg "Master AWS Console")
+![alt text](./img/LatencySync.jpeg "Latency synchronous")
 
-In case of the asynchronous replication we 
+![alt text](./img/StalenessSync.jpeg "Staleness sync")
+
+ 
+####Asynchronous replication 
+
+![alt text](./img/LatencyAsync.jpeg "Latency async")
+
+![alt text](./img/StalenessAsync.jpeg "Staleness async")
