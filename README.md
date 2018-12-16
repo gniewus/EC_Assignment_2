@@ -41,7 +41,14 @@ Client application was started locally.
     }
 ```
 
-After 200 write operations, we manually collect the logs from Client, Master and Slave. The logs are then merged together, and manualy transformed into a CSV file.
+After 200 write operations, we manually collect the logs from Client, Master and Slave. The logs are then merged together, and manually transformed into a single CSV file.
 
 ## 3) Analysis
 
+
+After collecting the logs, we have applied standard data cleaning transformations and aggregations to compute time differences between particular events. 
+First we've analyse synchronous replication. Figure below depicts the differences in latency for 100 requests. On average one request needs 407ms to be processed (median 365ms). On a diagram we can observe 3 'peaks' which were probably caused by the network delays.      
+
+![alt text](./img/LatencySync.jpeg "Master AWS Console")
+
+In case of the asynchronous replication we 
