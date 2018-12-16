@@ -33,7 +33,7 @@ After the development phase, we've deployed two variants of our code on two AWS 
 ## 2) Benchmarking Latency and Staleness 
 
 * <b>Latency</b> - full time of the write message. Time between sending the write message and receiving the response from the server. 
-* <b>Staleness</b> - 
+* <b>Staleness</b> - inconsitency in storage. Time period in which current state differs among the replicas. It begins after  commiting the change in storage on master node, and ends right after commiting the same change on the last replica. 
 
 Since the master and slave servers are running on separate AWS ec2 instances we can trigger client from local computer.
 <br><br>One server is located in Ireland the other in Frankfurt and our local client is in Berlin. In our calculations and analysis we need to remember that in Ireland the timezone is different.
