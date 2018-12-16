@@ -68,15 +68,15 @@ Since the master and slave servers are running on separate AWS ec2 instances we 
 After 200 write operations, we manually collect the logs from Client, Master and Slave. The logs are then merged together, and manually transformed into a single CSV file.
 
 ## 3) Analysis
-Average write message with synchronous replication latency - 
+Average write message with synchronous replication latency - 407 ms
 <br><br>
-Average write message with asynchronous replication latency - 
+Average write message with asynchronous replication latency - 283,5 ms
 <br><br>
-Average write message with synchronous replication staleness - 
+Average write message with synchronous replication staleness - 124 ms
 <br><br>
-Average write message with asynchronous replication staleness - 
+Average write message with asynchronous replication staleness - 135 ms
  
-####Synchronous replication 
+#### Synchronous replication 
 After collecting the logs, we have applied standard data cleaning transformations and aggregations to compute time differences between particular events. 
 First we've analyse synchronous replication. Figure below depicts the differences in latency for 100 requests. On average one request needs 407ms to be processed (median 365ms). On a diagram we can observe 3 'peaks' which were probably caused by the network delays.      
 
@@ -85,7 +85,7 @@ First we've analyse synchronous replication. Figure below depicts the difference
 ![alt text](./img/StalenessSync.jpeg "Staleness sync")
 
  
-####Asynchronous replication 
+#### Asynchronous replication 
 
 ![alt text](./img/LatencyAsync.jpeg "Latency async")
 
