@@ -14,8 +14,10 @@ import java.util.ResourceBundle;
 import java.util.UUID;
 
 /**
- * Implementation of a CRUD client
- * Client can write only to MasterServer but read from Master and SlaveServer. (Master server extends slave server)
+ * Implementation of a CRUD client.<br>
+ * Client can send messages to servers. Master and slave server. To send the message client.sendMsgToSlave(client.listKeys());
+ * <br>
+ * Client
  *
  * @author Jacek Janczura
  */
@@ -35,7 +37,7 @@ public class Client implements ICrud {
     private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("config");
 
     /**
-     * Default constructor with hardcoded test values.
+     * Default constructor which creates the Slave and Master server on a hosts and ports read form config.properties file.
      */
     public Client() {
         this.portSlave = Integer.valueOf(RESOURCE_BUNDLE.getString("portSlave"));
@@ -246,7 +248,7 @@ public class Client implements ICrud {
 
 
     /**
-     * Method which send the request to master server
+     * Method which sends the request to master server
      *
      * @param request request to be sent to master
      * @return response from the master server
@@ -260,7 +262,7 @@ public class Client implements ICrud {
     }
 
     /**
-     * Method which send the request to slave server
+     * Method which sends the request to slave server
      *
      * @param request request to be sent to slave
      * @return response from the master server
@@ -273,10 +275,10 @@ public class Client implements ICrud {
     }
 
     /**
-     * Method which send the request to slave server asynchronically.
+     * Method which sends the request to slave server asynchronously.
      *
      * @param request request to be sent to the slave
-     * @return response from the master server
+     *
      */
     public void sendAsyncMsgToSlave(Request request) {
 
@@ -289,7 +291,7 @@ public class Client implements ICrud {
     /**
      * Callback function used in an asynchronous replication. Function waits for the response and returns it.
      *
-     * @param callback Asynch callback to observe and to waight for the rsponsemessage.
+     * @param callback Asynch callback to observe and to wait for the rsponse message.
      * @return response from the server
      */
     private Response callbackFunction(AsyncCallback callback) {
@@ -315,7 +317,7 @@ public class Client implements ICrud {
 
 
     /**
-     * class that needs to be implement to set asynchronous messages
+     * class that needs to be implemented to set asynchronous messages
      */
     private class AsyncCallback implements AsyncCallbackRecipient {
 
