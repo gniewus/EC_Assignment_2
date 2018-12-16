@@ -78,7 +78,7 @@ Average write message with asynchronous replication staleness - 135 ms
  
 #### Synchronous replication 
 After collecting the logs, we have applied standard data cleaning transformations and aggregations to compute time differences between particular events. 
-First we've analyse synchronous replication. Figure below depicts the differences in latency for 100 requests. On average one request needs 407ms to be processed (median 365ms). On a diagram we can observe 3 'peaks' which were probably caused by the network delays.      
+First we've analysed synchronous replication. Figure below depicts the differences in latency for 100 requests. On average one request needs 407ms to be processed (median 365ms). On a diagram we can observe 3 'peaks' which were probably caused by the network delays.      
 
 ![alt text](./img/LatencySync.jpeg "Latency synchronous")
 
@@ -86,6 +86,7 @@ First we've analyse synchronous replication. Figure below depicts the difference
 
  
 #### Asynchronous replication 
+In case of the asynchronous replication, the average latency is almost two times faster than synchronous replication. 
 
 ![alt text](./img/LatencyAsync.jpeg "Latency async")
 
