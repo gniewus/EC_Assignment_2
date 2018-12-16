@@ -10,7 +10,7 @@ The aim of the project was to implement simple distributed key-value store which
 <br><br> <b>Synchronous</b> replication in case of for example write(key, value) message to the replica servers means that the message will be send from client to the master server. Master server will replicate the write on all of the replicas. When the master gets the response from all of the replicas he sends the final response to the client that the value is storred correctly. In this case client knows that the message is replicated already on other replicas(slave servers).
 <br><br> In contrary to synchronous replication <b>asynchronous</b> replication sends the response to the client just after storing the value in his KV store and than the master replicates that value on the other replicas.
 
-* JavaDoc is provided. All the details connected with the implementation can be found here - http://ec-docs.s3-website.eu-central-1.amazonaws.com
+* JavaDoc is provided. All the details connected with the implementation can be found here - https://gniewus.github.io/EC_Assignment_2/
 
 * Ports and hosts are taken from config.properties file during the runtime. 
 ```
