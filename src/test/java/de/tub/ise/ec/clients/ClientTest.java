@@ -15,17 +15,17 @@ public class ClientTest {
 
     @Test
     public void generalReplicationTest() {
-        client.sendSyncMsgToMaster(client.syncWrite("C", "valuex"));
-        client.sendSyncMsgToMaster(client.read("C"));
+        client.sendMsgToMaster(client.syncWrite("C", "valuex"));
+        client.sendMsgToMaster(client.read("C"));
 
-        client.sendSyncMsgToMaster(client.asyncWrite("Q", "Werty"));
-        client.sendSyncMsgToMaster(client.read("Q"));
+        client.sendMsgToMaster(client.asyncWrite("Q", "Werty"));
+        client.sendMsgToMaster(client.read("Q"));
 
-        Response listKeysMaster = client.sendSyncMsgToMaster(client.listKeys());
-        Response listKeysSlave = client.sendSyncMsgToSlave(client.listKeys());
+        Response listKeysMaster = client.sendMsgToMaster(client.listKeys());
+        Response listKeysSlave = client.sendMsgToSlave(client.listKeys());
 
-        client.sendSyncMsgToMaster(client.asyncDelete("Q"));
-        client.sendSyncMsgToMaster(client.syncDelete("Q"));
+        client.sendMsgToMaster(client.asyncDelete("Q"));
+        client.sendMsgToMaster(client.syncDelete("Q"));
 
         Assert.assertTrue(listKeysSlave.responseCode());
         Assert.assertTrue(listKeysMaster.responseCode());
@@ -35,7 +35,7 @@ public class ClientTest {
 
     @Test
     public void writeToSlave() {
-        Response res = client.sendSyncMsgToSlave(client.write("test","test","testId"));
+        Response res = client.sendMsgToSlave(client.write("test","test","testId"));
         Assert.assertTrue(res.responseCode());
     }
 
