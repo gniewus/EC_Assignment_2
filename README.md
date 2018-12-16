@@ -24,6 +24,10 @@ hostMaster=127.0.0.1
 * To run the simple main just run the jar. <br>
  `java -jar target/EC_Assignment_2-1.0-SNAPSHOT-shaded.jar `
 
+* In our project to handle the messages sent by the client to different type of servers we are using combination of strategy design pattern with factory design pattern. 
+Thanks to this approach we are using polymorphism, so adding a new messages to handle is really easy and will be handle by all types of the servers that implement IServer interface.
+
+
 ### Deployment
 After the development phase, we've deployed two variants of our code on two AWS EC2 instances. We've decided to take two t2.micro instances and spin them in different avalibility zones. The Master instance was deployed on  *EU-West-1* (Irland), whereas the Slave was deployed on *EU-Central-1* (Frankfurt). 
 ![alt text](./img/slave.png "Slave AWS Console")
