@@ -7,8 +7,9 @@ Authors: Jacek Janczura & Tomasz Tkaczyk
 <br><br>
 The aim of the project was to implement simple distributed key-value store which consists of two replicas, whereby one is the master and one is the slave. Clients always write to the master but can potentially read from both replica. 
 <br> Additionally we should measure <b>staleness</b> and <b>latency</b> of our system in the scenario of <b>asynchronous</b> and <b>synchronous</b> replication from the master server to all of the slave servers.
-<br> Synchronous replication in case of for example write(key, value) message to the replica servers means that the message will be send from client to the master server. Master server will replicate the write on all of the replicas. When the master gets the response from all of the replicas he sends the final response to the client that the value is storred correctly. In this case client knows that the message is replicated already on other replicas(slave servers).
-<br> In contrary to synchronous replication asynchronous replication sends the response to the client just after storing the value in his KV store and than the master replicates that value on the other replicas.
+<br><br> <b>Synchronous</b> replication in case of for example write(key, value) message to the replica servers means that the message will be send from client to the master server. Master server will replicate the write on all of the replicas. When the master gets the response from all of the replicas he sends the final response to the client that the value is storred correctly. In this case client knows that the message is replicated already on other replicas(slave servers).
+<br><br> In contrary to synchronous replication <b>asynchronous</b> replication sends the response to the client just after storing the value in his KV store and than the master replicates that value on the other replicas.
+
 * JavaDoc is provided. All the details connected with the implementation can be found there.
 
 * Ports and hosts are taken from config.properties file during the runtime. 
@@ -75,4 +76,4 @@ Average write message with synchronous replication staleness -
 <br><br>
 Average write message with asynchronous replication staleness - 
 
-As we previously 
+As we assumed the latency is lower for asynchronous replication since the master sends the response immediately and not afrer fonfirmation of the replication on the rest of the replicas.
